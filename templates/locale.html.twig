@@ -1,0 +1,31 @@
+{# templates/locale.html.twig #}
+{# app/Resources/views/includes/_flags.html.twig #}
+
+{% set route = app.request.attributes.get('_route') %}
+{% set route_params = app.request.attributes.get('_route_params') %}
+{% set params = route_params|merge(app.request.query.all) %}
+
+<div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {% if  app.request.locale == 'fr' %}
+            <span class="flag_fr"></span>
+            <span> Français </span>
+        {% elseif app.request.locale == 'en' %}
+            <span class="flag_en"></span>
+            <span> English </span>
+        {% endif %}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% for locale in locales if locale != app.request.locale %}
+            <a href="{{ path(route, params|merge({ _locale: locale })) }}"> 
+                {% if  locale == 'fr' %}
+                    <span class="flag_fr"></span> &nbsp;
+                    <span> Français </span>
+                {% elseif locale == 'en' %}
+                    <span class="flag_en"></span>
+                    <span> English </span>  
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+</div>

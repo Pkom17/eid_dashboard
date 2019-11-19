@@ -1,12 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
+        <meta name="description" content="">
+        <meta name="msapplication-tap-highlight" content="no">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body >
+        <div class="container-fluid" id="wrapper">
+            {% block menu %}
+                <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#">Tableau de bord EID</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_home' %} active {%endif%}" href="{{ path('app_home') }}">{{ 'Accueil'|trans }}<span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_trends' %} active {%endif%}" href="{{ path('app_trends') }}">{{ 'Tendances'|trans  }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_organization' %} active {%endif%}" href="{{ path('app_organization') }}">{{ 'Organisations'|trans  }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_partner' %} active {%endif%}" href="{{ path('app_partner') }}">{{ 'Partenaires'|trans  }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_positivity' %} active {%endif%}" href="{{ path('app_positivity') }}">{{ 'Positivité'|trans  }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_eid_import_new' %} active {%endif%}" href="{{ path('app_eid_import_new') }}">{{ 'Charger des données'|trans  }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">{{ 'Aide'|trans  }}</a>
+                            </li>
+                        </ul>
+                        <div>
+                            {% include 'locale.html.twig' %}                            
+                        </div>
+                    </div>
+                </nav>
+            {% endblock %}
+            <div id="content-wrapper" class="">
+                {% block body %}
+
+                {% endblock %}
+            </div>
+            <footer class="footer fixed-bottom">
+
+            </footer>
+        </div>
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
     </body>
 </html>

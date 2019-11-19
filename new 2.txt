@@ -1,0 +1,50 @@
+EID Dashboard:
+
+
+region(id,name,diis_code,datim_code)
+
+district(id,name,diis_code,datim_code,region_id)
+
+#region_district(id,region_id,district_id,min_date_active,max_date_active,active,date_updated)
+
+site(id,diis_code,datim_code,name,datim_name,priority,vl_test,eid_test,hiv_followup,latitude,longitude,active,district_id,partner_id)
+
+#district_site(id,district_id,site_id,min_date_active,max_date_active,active,date_updated)
+
+site_contact(id,name,contact,role,mail,site_id)
+
+plateforme(id,name,lab_desc,lab_location,site_id)
+
+lab_prefix(id,eid_prefix,vl_prefix,plateforme_id,date_updated)
+
+partner(id,name)
+
+#partner_site(id,partner_id,site_id,min_date_active,max_date_active,active)
+
+eid_patient(id, dbs_code, patient_code, birth_date, gender, infant_regimen, mother_regimen, mother_hiv_status, infant_ptme, type_of_clinic, feeding_type,
+stopped_breastfeeding, infant_symptomatic,infant_ARV infant_cotrimoxazole,last_test,date_updated)
+
+eid_test(id,labno,collected_date,received_date,completed_date,released_date,dispatched_date,infant_age_month,infant_age_week,infant_gender
+which_pcr,second_pcr_test_reason,rejected_reason,dna_pcr_result,site_id,patient_id,district_id,partner_id,region_id,date_updated)
+
+eid_age_category(id,name,age_min,age_max,level)
+
+eid_dictionnary(id,entry_name,entry_trans,domain) 
+# reason_for_second_pcr, hiv_status, feeding_type, stop_breastfeeding, type_of_clinic, eid_prophylaxy, rejected_reason,pcr_result,gender
+
+##  compteur de visites:
+visitor(id,visited_count,ip_address,first_visited_date,last_visited_date,timestamp)
+
+page_visited(id,page,visited_count,first_visited_date,last_visited_date,visitor_id)
+
+eid_import(id,date_import,file_size,file_name,rows_number)
+
+
+#######################
+connexion
+recuperer adresse_ip
+verifier si adresse_ip est stocké 
+	si oui actualise date connexion
+	si non stocké adresse_ip - incremente nombre de visiteur
+	
+

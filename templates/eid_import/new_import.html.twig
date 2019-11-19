@@ -1,0 +1,29 @@
+{# templates/eid_import/new_import.html.twig #}
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container upload_form_container">
+        <div class="row">
+            <div class="col-sm-3"> </div>
+            <div class="col-sm-6">
+                <h1>{{ 'Importer un nouveau fichier'|trans }}</h1>
+                {{ form_start(form) }}
+                <div class="errors">
+                    {{ form_errors(form) }}
+                </div>
+                <div class="custom-file mb-3">
+                    {{ form_widget(form.file, {'attr': {'class': 'custom-file-input'}}) }}
+                    {{ form_label(form.file, 'Choisir le fichier CSV', {'label_attr': {'class': 'custom-file-label'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary btn-bloc'}}) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('form_upload') }}
+{% endblock %}

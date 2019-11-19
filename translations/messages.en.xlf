@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="fr" target-language="en" datatype="plaintext" original="file.ext">
+        <header>
+            <tool tool-id="symfony" tool-name="Symfony"/>
+        </header>
+        <body>
+            <trans-unit id="import_file_title" resname="Importer un nouveau fichier">
+                <source>Importer un nouveau fichier</source>
+                <target>Importer a new file</target>
+            </trans-unit>
+            <trans-unit id="import_file" resname="Importer">
+                <source>Importer</source>
+                <target>Import</target>
+            </trans-unit>
+            <trans-unit id="load_file" resname="Choisir le fichier CSV">
+                <source>Choisir le fichier CSV</source>
+                <target>Upload CSV file</target>
+            </trans-unit>
+            <trans-unit id="accueil" resname="Accueil">
+                <source>Accueil</source>
+                <target>Home</target>
+            </trans-unit>
+            <trans-unit id="menu_trends" resname="Tendances">
+                <source>Tendances</source>
+                <target>Trends</target>
+            </trans-unit>
+            <trans-unit id="menu_organization" resname="Organisations">
+                <source>Organisations</source>
+                <target>Organizations</target>
+            </trans-unit>
+            <trans-unit id="menu_partenaire" resname="Partenaires">
+                <source>Partenaires</source>
+                <target>Partners</target>
+            </trans-unit>
+            <trans-unit id="menu_positivity" resname="Positivité">
+                <source>Positivité</source>
+                <target>Positivity</target>
+            </trans-unit>
+            <trans-unit id="menu_data_import" resname="Charger des données">
+                <source>Charger des données</source>
+                <target>Data import</target>
+            </trans-unit>
+            <trans-unit id="menu_help" resname="Aide">
+                <source>Aide</source>
+                <target>Help</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
