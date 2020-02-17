@@ -14,16 +14,18 @@
         {% endif %}
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        {% for locale in locales if locale != app.request.locale %}
-            <a href="{{ path(route, params|merge({ _locale: locale })) }}"> 
-                {% if  locale == 'fr' %}
-                    <span class="flag_fr"></span> &nbsp;
-                    <span> Français </span>
-                {% elseif locale == 'en' %}
-                    <span class="flag_en"></span>
-                    <span> English </span>  
-                {% endif %}
-            </a>
+        {% for locale in locales %}
+            {% if locale != app.request.locale  %}
+                <a href="{{ path(route, params|merge({ _locale: locale })) }}"> 
+                    {% if  locale == 'fr' %}
+                        <span class="flag_fr"></span> &nbsp;
+                        <span> Français </span>
+                    {% elseif locale == 'en' %}
+                        <span class="flag_en"></span>
+                        <span> English </span>  
+                    {% endif %}
+                </a>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
