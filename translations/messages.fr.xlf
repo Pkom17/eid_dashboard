@@ -5,6 +5,10 @@
             <tool tool-id="symfony" tool-name="Symfony"/>
         </header>
         <body>
+            <trans-unit id="brand_title" resname="Tableau de bord EID">
+                <source>Tableau de bord EID</source>
+                <target>Tableau de bord EID</target>
+            </trans-unit>
             <trans-unit id="import_file_title" resname="Importer un nouveau fichier">
                 <source>Importer un nouveau fichier</source>
                 <target>Importer un nouveau fichier</target>
@@ -25,6 +29,10 @@
                 <source>Tendances</source>
                 <target>Tendances</target>
             </trans-unit>
+            <trans-unit id="menu_labs" resname="Labos">
+                <source>Laboratoires</source>
+                <target>Performances des labos</target>
+            </trans-unit>
             <trans-unit id="menu_organization" resname="Organisations">
                 <source>Organisations</source>
                 <target>Organisations</target>
@@ -44,6 +52,230 @@
             <trans-unit id="menu_help" resname="Aide">
                 <source>Aide</source>
                 <target>Aide</target>
+            </trans-unit>
+            <trans-unit id="panel_tendance_test" resname="Tendances des tests">
+                <source>Tendances des tests</source>
+                <target>Tendances des tests</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_eid" resname="Resultats EID">
+                <source>Resultats EID</source>
+                <target>Resultats EID</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_eid_age" resname="Resultats EID par tranche d'age">
+                <source>Resultats EID par tranche d'age</source>
+                <target>Resultats EID par tranche d'age</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_eid_par_service" resname="Resultats EID par service de provenance">
+                <source>Resultats EID  par service de provenance</source>
+                <target>Resultats EID  par service de provenance</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_eid_regime_mere" resname="Resultats EID par regime de la mère au cours de la PTME">
+                <source>Resultats EID  par regime de la mère au cours de la PTME</source>
+                <target>Resultats EID  par regime de la mère au cours de la PTME</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_eid_statut_mere" resname="Resultats EID par Statut VIH de la mère">
+                <source>Resultats EID par Statut VIH de la mère</source>
+                <target>Resultats EID par Statut VIH de la mère</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_arv_enfant" resname="Resultats EID par prophylaxie ARV de l'enfant">
+                <source>Resultats EID par prophylaxie ARV de l'enfant</source>
+                <target>Resultats EID par prophylaxie ARV de l'enfant</target>
+            </trans-unit>
+            <trans-unit id="panel_resultat_eid_par_regions" resname="Resultats EID par régions">
+                <source>Resultats EID par régions</source>
+                <target>Resultats EID par régions</target>
+            </trans-unit>
+            <trans-unit id="filtre_debut" resname="Début">
+                <source>Début</source>
+                <target>Début</target>
+            </trans-unit>
+            <trans-unit id="filtre_fin" resname="Fin">
+                <source>Fin</source>
+                <target>Fin</target>
+            </trans-unit>
+            <trans-unit id="filtre_date" resname="Filtrer">
+                <source>Filtrer</source>
+                <target>Filtrer</target>
+            </trans-unit>
+            <trans-unit id="month_jan" resname="Jan">
+                <source>Jan</source>
+                <target>Jan</target>
+            </trans-unit>
+            <trans-unit id="month_feb" resname="Feb">
+                <source>Feb</source>
+                <target>Fév</target>
+            </trans-unit>
+            <trans-unit id="month_mar" resname="Mar">
+                <source>Mar</source>
+                <target>Mar</target>
+            </trans-unit>
+            <trans-unit id="month_apr" resname="Apr">
+                <source>Apr</source>
+                <target>Avr</target>
+            </trans-unit>
+            <trans-unit id="month_may" resname="May">
+                <source>May</source>
+                <target>Mai</target>
+            </trans-unit>
+            <trans-unit id="month_jun" resname="Jun">
+                <source>Jun</source>
+                <target>Juin</target>
+            </trans-unit>
+            <trans-unit id="month_jul" resname="Jul">
+                <source>Jul</source>
+                <target>Juil</target>
+            </trans-unit>
+            <trans-unit id="month_aug" resname="Aug">
+                <source>Aug</source>
+                <target>Aout</target>
+            </trans-unit>
+            <trans-unit id="month_sep" resname="Sep">
+                <source>Sep</source>
+                <target>Sept</target>
+            </trans-unit>
+            <trans-unit id="month_oct" resname="Oct">
+                <source>Oct</source>
+                <target>Oct</target>
+            </trans-unit>
+            <trans-unit id="month_nov" resname="Nov">
+                <source>Nov</source>
+                <target>Nov</target>
+            </trans-unit>
+            <trans-unit id="month_dec" resname="Dec">
+                <source>Dec</source>
+                <target>Déc</target>
+            </trans-unit>
+            <trans-unit id="month_janvier" resname="Janvier">
+                <source>Janvier</source>
+                <target>Janvier</target>
+            </trans-unit>
+            <trans-unit id="month_fevrier" resname="Février">
+                <source>Février</source>
+                <target>Février</target>
+            </trans-unit>
+            <trans-unit id="month_mars" resname="Mars">
+                <source>Mars</source>
+                <target>Mars</target>
+            </trans-unit>
+            <trans-unit id="month_avril" resname="Avril">
+                <source>Avril</source>
+                <target>Avril</target>
+            </trans-unit>
+            <trans-unit id="month_mai" resname="Mai">
+                <source>Mai</source>
+                <target>Mai</target>
+            </trans-unit>
+            <trans-unit id="month_juin" resname="Juin">
+                <source>Juin</source>
+                <target>Juin</target>
+            </trans-unit>
+            <trans-unit id="month_juillet" resname="Juillet">
+                <source>Juillet</source>
+                <target>Juillet</target>
+            </trans-unit>
+            <trans-unit id="month_aout" resname="Août">
+                <source>Août</source>
+                <target>Août</target>
+            </trans-unit>
+            <trans-unit id="month_septembre" resname="Septembre">
+                <source>Septembre</source>
+                <target>Septembre</target>
+            </trans-unit>
+            <trans-unit id="month_octobre" resname="Octobre">
+                <source>Octobre</source>
+                <target>Octobre</target>
+            </trans-unit>
+            <trans-unit id="month_novembre" resname="Novembre">
+                <source>Novembre</source>
+                <target>Novembre</target>
+            </trans-unit>
+            <trans-unit id="month_decembre" resname="Décembre">
+                <source>Décembre</source>
+                <target>Décembre</target>
+            </trans-unit>
+            <trans-unit id="positive" resname="Positive">
+                <source>Positive</source>
+                <target>Positif</target>
+            </trans-unit>
+            <trans-unit id="negative" resname="Negative">
+                <source>Negative</source>
+                <target>Négatif</target>
+            </trans-unit>
+            <trans-unit id="test_done" resname="Tests done">
+                <source>Tests Done</source>
+                <target>Tests Effectués</target>
+            </trans-unit>
+            <trans-unit id="btn_reset" resname="Annuler">
+                <source>Annuler</source>
+                <target>Annuler</target>
+            </trans-unit>
+            <trans-unit id="lab_de" resname="De:">
+                <source>De:</source>
+                <target>De:</target>
+            </trans-unit>
+            <trans-unit id="lab_a" resname="A:">
+                <source>A:</source>
+                <target>A:</target>
+            </trans-unit>
+            <trans-unit id="lab_rang_pcr" resname="Rang PCR">
+                <source>Rang PCR</source>
+                <target>Rang PCR</target>
+            </trans-unit>
+            <trans-unit id="lab_tout" resname="Tout">
+                <source>Tout</source>
+                <target>Tout</target>
+            </trans-unit>
+            <trans-unit id="lab_pcr_1" resname="1er PCR">
+                <source>1er PCR</source>
+                <target>1er PCR</target>
+            </trans-unit>
+            <trans-unit id="lab_pcr_2" resname="2eme PCR">
+                <source>2eme PCR</source>
+                <target>2eme PCR</target>
+            </trans-unit>
+            <trans-unit id="lab_pcr_non_defini" resname="Non défini">
+                <source>Non défini</source>
+                <target>Non défini</target>
+            </trans-unit>
+            <trans-unit id="lab_percentage" resname="Percentage">
+                <source>Percentage</source>
+                <target>Pourcentage</target>
+            </trans-unit>
+            <trans-unit id="cat_aucune_donnee" resname="Aucune donnée">
+                <source>Aucune donnée</source>
+                <target>Aucune donnée</target>
+            </trans-unit>
+            <trans-unit id="cat_aucune" resname="Aucune">
+                <source>Aucune</source>
+                <target>Aucune</target>
+            </trans-unit>
+            <trans-unit id="cat_inconnu" resname="Inconnu">
+                <source>Inconnu</source>
+                <target>Inconnu</target>
+            </trans-unit>
+            <trans-unit id="cat_ne_sait_pas" resname="Ne sait pas">
+                <source>Ne sait pas</source>
+                <target>Ne sait pas</target>
+            </trans-unit>
+            <trans-unit id="cat_autres" resname="Autres">
+                <source>Autres</source>
+                <target>Autres</target>
+            </trans-unit>
+            <trans-unit id="lab_tat_jours" resname="TAT (Jours)">
+                <source>TAT (Jours)</source>
+                <target>TAT (Jours)</target>
+            </trans-unit>
+            <trans-unit id="lab_total_test_done" resname="Total Test done">
+                <source>Total Test done</source>
+                <target>Tests effectués</target>
+            </trans-unit>
+            <trans-unit id="lab_total_patient_tested" resname="Total patient tested">
+                <source>Total patient tested</source>
+                <target>Patients testés</target>
+            </trans-unit>
+            <trans-unit id="lab_positivity" resname="Positivity">
+                <source>Positivity</source>
+                <target>Positivité</target>
             </trans-unit>
         </body>
     </file>

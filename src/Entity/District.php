@@ -51,71 +51,60 @@ class District {
      */
     protected $sites;
 
-    public function __construct()
-    {
+
+    public function __construct() {
         $this->sites = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
+    public function setName(string $name): self {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getDiisCode(): ?string
-    {
+    public function getDiisCode(): ?string {
         return $this->diisCode;
     }
 
-    public function setDiisCode(?string $diisCode): self
-    {
+    public function setDiisCode(?string $diisCode): self {
         $this->diisCode = $diisCode;
 
         return $this;
     }
 
-    public function getDatimCode(): ?string
-    {
+    public function getDatimCode(): ?string {
         return $this->datimCode;
     }
 
-    public function setDatimCode(?string $datimCode): self
-    {
+    public function setDatimCode(?string $datimCode): self {
         $this->datimCode = $datimCode;
 
         return $this;
     }
 
-    public function getActive(): ?bool
-    {
+    public function getActive(): ?bool {
         return $this->active;
     }
 
-    public function setActive(?bool $active): self
-    {
+    public function setActive(?bool $active): self {
         $this->active = $active;
 
         return $this;
     }
 
-    public function getRegion(): ?Region
-    {
+    public function getRegion(): ?Region {
         return $this->region;
     }
 
-    public function setRegion(?Region $region): self
-    {
+    public function setRegion(?Region $region): self {
         $this->region = $region;
 
         return $this;
@@ -124,13 +113,11 @@ class District {
     /**
      * @return Collection|Site[]
      */
-    public function getSites(): Collection
-    {
+    public function getSites(): Collection {
         return $this->sites;
     }
 
-    public function addSite(Site $site): self
-    {
+    public function addSite(Site $site): self {
         if (!$this->sites->contains($site)) {
             $this->sites[] = $site;
             $site->setDistrict($this);
@@ -139,8 +126,7 @@ class District {
         return $this;
     }
 
-    public function removeSite(Site $site): self
-    {
+    public function removeSite(Site $site): self {
         if ($this->sites->contains($site)) {
             $this->sites->removeElement($site);
             // set the owning side to null (unless already changed)
@@ -151,7 +137,5 @@ class District {
 
         return $this;
     }
-
-    
 
 }

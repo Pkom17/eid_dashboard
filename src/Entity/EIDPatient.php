@@ -28,40 +28,32 @@ class EIDPatient {
     protected $id;
 
     /**
-     * @ORM\column(type="string",length=20)
+     * @ORM\column(type="string",length=20,nullable=true)
      */
     protected $dbs_code;
 
     /**
-     * @ORM\column(type="string",length=30)
+     * @ORM\column(type="string",length=60,nullable=true)
      */
     protected $patient_code;
 
     /**
-     * @ORM\Column(type="date", name="birth_date")
+     * @ORM\Column(type="date", name="birth_date",nullable=true)
      */
     protected $birthDate;
 
     /**
-     * @ORM\Column(type="integer", name="gender")
+     * @ORM\Column(type="integer", name="gender",nullable=true)
      */
     protected $gender;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="infant_regimen", referencedColumnName="id")
-     */
-    protected $infantRegimen;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="mother_regimen", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="mother_regimen",nullable=true)
      */
     protected $motherRegimen;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="mother_hiv_status", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="mother_hiv_status",nullable=true)
      */
     protected $motherHivStatus;
 
@@ -69,29 +61,25 @@ class EIDPatient {
     protected $infantPTME;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="type_of_clinic", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="type_of_clinic",nullable=true)
      */
     protected $typeOfClinic;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="feeding_type", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="feeding_type",nullable=true)
      */
     protected $feedingType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="stopped_breastfeeding", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="stopped_breastfeeding",nullable=true)
      */
     protected $stoppedBreastfeeding;
 
-    /**  @ORM\Column(type="boolean") */
+    /**  @ORM\Column(type="boolean",nullable=true) */
     protected $infantSymptomatic;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="infant_arv", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="infant_arv",nullable=true)
      */
     protected $infantARV;
 
@@ -121,7 +109,7 @@ class EIDPatient {
         return $this->dbs_code;
     }
 
-    public function setDbsCode(string $dbs_code): self {
+    public function setDbsCode(?string $dbs_code): self {
         $this->dbs_code = $dbs_code;
 
         return $this;
@@ -131,7 +119,7 @@ class EIDPatient {
         return $this->patient_code;
     }
 
-    public function setPatientCode(string $patient_code): self {
+    public function setPatientCode(?string $patient_code): self {
         $this->patient_code = $patient_code;
 
         return $this;
@@ -161,7 +149,7 @@ class EIDPatient {
         return $this->infantSymptomatic;
     }
 
-    public function setInfantSymptomatic(bool $infantSymptomatic): self {
+    public function setInfantSymptomatic(?bool $infantSymptomatic): self {
         $this->infantSymptomatic = $infantSymptomatic;
 
         return $this;
@@ -197,81 +185,71 @@ class EIDPatient {
         return $this;
     }
 
-    public function getGender(): ?dictionary {
+    public function getGender(): ?int {
         return $this->gender;
     }
 
-    public function setGender(?dictionary $gender): self {
+    public function setGender(?int $gender): self {
         $this->gender = $gender;
 
         return $this;
     }
 
-    public function getInfantRegimen(): ?dictionary {
-        return $this->infantRegimen;
-    }
-
-    public function setInfantRegimen(?dictionary $infantRegimen): self {
-        $this->infantRegimen = $infantRegimen;
-
-        return $this;
-    }
-
-    public function getMotherRegimen(): ?dictionary {
+    public function getMotherRegimen(): ?int {
         return $this->motherRegimen;
     }
 
-    public function setMotherRegimen(?dictionary $motherRegimen): self {
+    public function setMotherRegimen(?int $motherRegimen): self {
         $this->motherRegimen = $motherRegimen;
 
         return $this;
     }
 
-    public function getMotherHivStatus(): ?dictionary {
+    public function getMotherHivStatus(): ?int {
         return $this->motherHivStatus;
     }
 
-    public function setMotherHivStatus(?dictionary $motherHivStatus): self {
+    public function setMotherHivStatus(?int $motherHivStatus): self {
         $this->motherHivStatus = $motherHivStatus;
 
         return $this;
     }
 
-    public function getTypeOfClinic(): ?dictionary {
+    public function getTypeOfClinic(): ?int {
         return $this->typeOfClinic;
     }
 
-    public function setTypeOfClinic(?dictionary $typeOfClinic): self {
+    public function setTypeOfClinic(?int $typeOfClinic): self {
         $this->typeOfClinic = $typeOfClinic;
 
         return $this;
     }
 
-    public function getFeedingType(): ?dictionary {
+    public function getFeedingType(): ?int {
         return $this->feedingType;
     }
 
-    public function setFeedingType(?dictionary $feedingType): self {
+    public function setFeedingType(?int $feedingType): self {
         $this->feedingType = $feedingType;
 
         return $this;
     }
 
-    public function getStoppedBreastfeeding(): ?dictionary {
+    public function getStoppedBreastfeeding(): ?int {
         return $this->stoppedBreastfeeding;
     }
 
-    public function setStoppedBreastfeeding(?dictionary $stoppedBreastfeeding): self {
+    public function setStoppedBreastfeeding(?int $stoppedBreastfeeding): self {
         $this->stoppedBreastfeeding = $stoppedBreastfeeding;
 
         return $this;
     }
 
-    public function getInfantARV(): ?dictionary {
+    public function getInfantARV(): ?int {
         return $this->infantARV;
     }
 
-    public function setInfantARV(?dictionary $infantARV): self {
+    public function setInfantARV(?int $infantARV): self {
         $this->infantARV = $infantARV;
 
         return $this;
@@ -280,13 +258,11 @@ class EIDPatient {
     /**
      * @return Collection|EIDTest[]
      */
-    public function getEidTests(): Collection
-    {
+    public function getEidTests(): Collection {
         return $this->eidTests;
     }
 
-    public function addEidTest(EIDTest $eidTest): self
-    {
+    public function addEidTest(EIDTest $eidTest): self {
         if (!$this->eidTests->contains($eidTest)) {
             $this->eidTests[] = $eidTest;
             $eidTest->setPatient($this);
@@ -295,8 +271,7 @@ class EIDPatient {
         return $this;
     }
 
-    public function removeEidTest(EIDTest $eidTest): self
-    {
+    public function removeEidTest(EIDTest $eidTest): self {
         if ($this->eidTests->contains($eidTest)) {
             $this->eidTests->removeElement($eidTest);
             // set the owning side to null (unless already changed)

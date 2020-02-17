@@ -26,9 +26,14 @@ class EIDTest {
     protected $id;
 
     /**
-     * @ORM\column(type="string",length=20)
+     * @ORM\column(type="string",length=20, unique=true)
      */
     protected $labno;
+
+    /**
+     * @ORM\column(type="integer",length=8,name="yearmonth")
+     */
+    protected $yearmonth;
 
     /**
      * @ORM\Column(type="datetime", name="collected_date")
@@ -60,70 +65,68 @@ class EIDTest {
     protected $dispatchedDate;
 
     /**
-     * @ORM\Column(type="integer", name="infant_age_month")
+     * @ORM\Column(type="integer", name="infant_age_month",nullable=true)
      */
     protected $infantAgeMonth;
 
     /**
-     * @ORM\Column(type="integer", name="infant_age_week")
+     * @ORM\Column(type="integer", name="infant_age_week",nullable=true)
      */
     protected $infantAgeWeek;
 
     /**
-     * @ORM\Column(type="integer", name="infant_gender")
+     * @ORM\Column(type="integer", name="infant_gender",nullable=true)
      */
     protected $infantGender;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="which_pcr", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="which_pcr",nullable=true)
      */
     protected $WhichPCR;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="second_pcr_test_reason", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="second_pcr_test_reason",nullable=true)
      */
     protected $secondPCRTestReason;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDDictionary")
-     * @ORM\JoinColumn(name="rejected_reason", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="rejected_reason",nullable=true)
      */
     protected $rejectedReason;
 
     /**
-     * @ORM\column(type="string",length=60,name="pcr_result")
+     * @ORM\column(type="string",length=60,name="pcr_result",nullable=true)
      */
     protected $pcrResult;
 
     /**
-     * @ORM\ManyToOne(targetEntity="EIDPatient", inversedBy="eidTests")
+     * @ORM\ManyToOne(targetEntity="EIDPatient", inversedBy="eidTests",cascade={"persist"})
      * @ORM\JoinColumn(name="patient_id", referencedColumnName="id")
      */
     protected $patient;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Site", inversedBy="eidTests")
-     * @ORM\JoinColumn(name="site_id", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="site_id",nullable=true)
      */
     protected $site;
 
     /**
-     * @ORM\ManyToOne(targetEntity="District", inversedBy="eidTests")
-     * @ORM\JoinColumn(name="district_id", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="district_id",nullable=true)
      */
     protected $district;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Region", inversedBy="eidTests")
-     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="region_id",nullable=true)
      */
     protected $region;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Partner", inversedBy="eidTests")
-     * @ORM\JoinColumn(name="partner_id", referencedColumnName="id")
+     * @ORM\Column(type="integer", name="plateforme_id",nullable=true)
+     */
+    protected $plateforme;
+
+    /**
+     * @ORM\Column(type="integer", name="partner_id",nullable=true)
      */
     protected $partner;
 
@@ -133,241 +136,218 @@ class EIDTest {
      */
     protected $dateUpdated;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getLabno(): ?string
-    {
+    public function getLabno(): ?string {
         return $this->labno;
     }
 
-    public function setLabno(string $labno): self
-    {
+    public function setLabno(string $labno): self {
         $this->labno = $labno;
 
         return $this;
     }
 
-    public function getCollectedDate(): ?\DateTimeInterface
-    {
+    public function getYearmonth(): ?int {
+        return $this->yearmonth;
+    }
+
+    public function setYearmonth(int $yearmonth): self {
+        $this->yearmonth = $yearmonth;
+
+        return $this;
+    }
+
+    public function getCollectedDate(): ?\DateTimeInterface {
         return $this->collectedDate;
     }
 
-    public function setCollectedDate(\DateTimeInterface $collectedDate): self
-    {
+    public function setCollectedDate(\DateTimeInterface $collectedDate): self {
         $this->collectedDate = $collectedDate;
 
         return $this;
     }
 
-    public function getReceivedDate(): ?\DateTimeInterface
-    {
+    public function getReceivedDate(): ?\DateTimeInterface {
         return $this->receivedDate;
     }
 
-    public function setReceivedDate(\DateTimeInterface $receivedDate): self
-    {
+    public function setReceivedDate(\DateTimeInterface $receivedDate): self {
         $this->receivedDate = $receivedDate;
 
         return $this;
     }
 
-    public function getCompletedDate(): ?\DateTimeInterface
-    {
+    public function getCompletedDate(): ?\DateTimeInterface {
         return $this->completedDate;
     }
 
-    public function setCompletedDate(\DateTimeInterface $completedDate): self
-    {
+    public function setCompletedDate(\DateTimeInterface $completedDate): self {
         $this->completedDate = $completedDate;
 
         return $this;
     }
 
-    public function getReleasedDate(): ?\DateTimeInterface
-    {
+    public function getReleasedDate(): ?\DateTimeInterface {
         return $this->releasedDate;
     }
 
-    public function setReleasedDate(\DateTimeInterface $releasedDate): self
-    {
+    public function setReleasedDate(\DateTimeInterface $releasedDate): self {
         $this->releasedDate = $releasedDate;
 
         return $this;
     }
 
-    public function getDispatchedDate(): ?\DateTimeInterface
-    {
+    public function getDispatchedDate(): ?\DateTimeInterface {
         return $this->dispatchedDate;
     }
 
-    public function setDispatchedDate(?\DateTimeInterface $dispatchedDate): self
-    {
+    public function setDispatchedDate(?\DateTimeInterface $dispatchedDate): self {
         $this->dispatchedDate = $dispatchedDate;
 
         return $this;
     }
 
-    public function getInfantAgeMonth(): ?int
-    {
+    public function getInfantAgeMonth(): ?int {
         return $this->infantAgeMonth;
     }
 
-    public function setInfantAgeMonth(int $infantAgeMonth): self
-    {
+    public function setInfantAgeMonth(?int $infantAgeMonth): self {
         $this->infantAgeMonth = $infantAgeMonth;
 
         return $this;
     }
 
-    public function getInfantAgeWeek(): ?int
-    {
+    public function getInfantAgeWeek(): ?int {
         return $this->infantAgeWeek;
     }
 
-    public function setInfantAgeWeek(int $infantAgeWeek): self
-    {
+    public function setInfantAgeWeek(?int $infantAgeWeek): self {
         $this->infantAgeWeek = $infantAgeWeek;
 
         return $this;
     }
 
-    public function getDateUpdated(): ?\DateTimeInterface
-    {
+    public function getDateUpdated(): ?\DateTimeInterface {
         return $this->dateUpdated;
     }
 
-    public function setDateUpdated(\DateTimeInterface $dateUpdated): self
-    {
+    public function setDateUpdated(\DateTimeInterface $dateUpdated): self {
         $this->dateUpdated = $dateUpdated;
 
         return $this;
     }
 
-    public function getInfantGender(): ?EIDDictionary
-    {
+    public function getInfantGender(): ?int {
         return $this->infantGender;
     }
 
-    public function setInfantGender(?EIDDictionary $infantGender): self
-    {
+    public function setInfantGender(?int $infantGender): self {
         $this->infantGender = $infantGender;
 
         return $this;
     }
 
-    public function getWhichPCR(): ?EIDDictionary
-    {
+    public function getWhichPCR(): ?int {
         return $this->WhichPCR;
     }
 
-    public function setWhichPCR(?EIDDictionary $WhichPCR): self
-    {
+    public function setWhichPCR(?int $WhichPCR): self {
         $this->WhichPCR = $WhichPCR;
 
         return $this;
     }
 
-    public function getSecondPCRTestReason(): ?EIDDictionary
-    {
+    public function getSecondPCRTestReason(): ?int {
         return $this->secondPCRTestReason;
     }
 
-    public function setSecondPCRTestReason(?EIDDictionary $secondPCRTestReason): self
-    {
+    public function setSecondPCRTestReason(?int $secondPCRTestReason): self {
         $this->secondPCRTestReason = $secondPCRTestReason;
 
         return $this;
     }
 
-    public function getRejectedReason(): ?EIDDictionary
-    {
+    public function getRejectedReason(): ?int {
         return $this->rejectedReason;
     }
 
-    public function setRejectedReason(?EIDDictionary $rejectedReason): self
-    {
+    public function setRejectedReason(?int $rejectedReason): self {
         $this->rejectedReason = $rejectedReason;
 
         return $this;
     }
 
-    public function getPcrResult(): ?EIDDictionary
-    {
+    public function getPcrResult(): ?string {
         return $this->pcrResult;
     }
 
-    public function setPcrResult(?EIDDictionary $pcrResult): self
-    {
+    public function setPcrResult(?string $pcrResult): self {
         $this->pcrResult = $pcrResult;
 
         return $this;
     }
 
-    public function getPatient(): ?EIDPatient
-    {
+    public function getPatient(): ?EIDPatient {
         return $this->patient;
     }
 
-    public function setPatient(?EIDPatient $patient): self
-    {
+    public function setPatient(?EIDPatient $patient): self {
         $this->patient = $patient;
 
         return $this;
     }
 
-    public function getSite(): ?Site
-    {
+    public function getSite(): ?int {
         return $this->site;
     }
 
-    public function setSite(?Site $site): self
-    {
+    public function setSite(?int $site): self {
         $this->site = $site;
 
         return $this;
     }
 
-    public function getDistrict(): ?District
-    {
+    public function getDistrict(): ?int {
         return $this->district;
     }
 
-    public function setDistrict(?District $district): self
-    {
+    public function setDistrict(?int $district): self {
         $this->district = $district;
 
         return $this;
     }
 
-    public function getRegion(): ?Region
-    {
+    public function getRegion(): ?int {
         return $this->region;
     }
 
-    public function setRegion(?Region $region): self
-    {
+    public function setRegion(?int $region): self {
         $this->region = $region;
 
         return $this;
     }
 
-    public function getPartner(): ?Partner
-    {
+    public function setPlateforme(?int $plateforme): self {
+        $this->plateforme = $plateforme;
+
+        return $this;
+    }
+
+    public function getPlateforme(): ?int {
+        return $this->plateforme;
+    }
+
+    public function getPartner(): ?int {
         return $this->partner;
     }
 
-    public function setPartner(?Partner $partner): self
-    {
+    public function setPartner(?int $partner): self {
         $this->partner = $partner;
 
         return $this;
     }
-    
-
-
-   
 
 }

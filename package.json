@@ -19,6 +19,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bootstrap": "^4.3.1"
+        "bootstrap": "^4.3.1",
+        "highcharts": "^8.0.0",
+        "webpack-jquery-ui": "^2.0.1"
     }
 }

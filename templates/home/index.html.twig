@@ -1,8 +1,140 @@
 {# templates/home/index.html.twig #}
 {% extends 'base.html.twig' %}
-{% block body %}
-    
-{% endblock %}
 {% block javascripts %}
     {{ parent() }}
+{% endblock %}
+{% block javascripts_2 %}
+    {{ encore_entry_script_tags('home') }}
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    <div class="row summary">
+        {{ render(controller('App\\Controller\\IndexController::summaryInfos')) }}
+    </div>
+    <div class="row sum_lane_1">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <div class="row"> 
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances des tests'|trans|upper }}</h6>
+                            <span class="date_filtered float-left">
+                                {{ start_for_trends ~' - '~ end}}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-4 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Rang PCR'|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_pcr" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    <option value="1">{{'1er PCR'|trans  }}</option>
+                                    <option value="2">{{'2eme PCR'|trans  }}</option>
+                                    <option value="-1">{{'Non défini'|trans  }}</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="card_test_trends">
+                    {{ render(controller('App\\Controller\\IndexController::testTrends')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_2">
+        <div class="col-xl-4 col-lg-4 col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                {{ render(controller('App\\Controller\\IndexController::eidOutcomes')) }}
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par Statut VIH de la mère'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\IndexController::eidOutcomesMotherStatus')) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par tranche d\'age'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\IndexController::eidOutcomesAge')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_3">
+        <div class="col-xl-4 col-lg-4 col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par service de provenance'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\IndexController::eidOutcomesByClinicType')) }}
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par regime de la mère au cours de la PTME'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                {{ render(controller('App\\Controller\\IndexController::eidOutcomesByMotherRegimen')) }}
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par prophylaxie ARV de l\'enfant'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\IndexController::eidOutcomesByInfantARV')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_4">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par régions'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\IndexController::eidOutcomesByRegion')) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

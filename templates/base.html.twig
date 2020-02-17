@@ -10,22 +10,29 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
     </head>
     <body >
         <div class="container-fluid" id="wrapper">
             {% block menu %}
                 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#">Tableau de bord EID</a>
+                    <img src="{{ asset('build/images/logo_moh.jpg') }}" alt="brand" title="logo MOH" height="52" class="" style="padding:0;"/>
+                    <a class="navbar-brand" href="#">{{ 'Tableau de bord EID'|trans  }}</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto nav-tabs">
+                        <ul class="navbar-nav mr-auto nav-tabs menu">
                             <li class="nav-item">
                                 <a class="nav-link {%if app.request.get('_route') == 'app_home' %} active {%endif%}" href="{{ path('app_home') }}">{{ 'Accueil'|trans }}<span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {%if app.request.get('_route') == 'app_trends' %} active {%endif%}" href="{{ path('app_trends') }}">{{ 'Tendances'|trans  }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {%if app.request.get('_route') == 'app_labs' %} active {%endif%}" href="{{ path('app_labs') }}">{{ 'Labos'|trans  }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {%if app.request.get('_route') == 'app_organization' %} active {%endif%}" href="{{ path('app_organization') }}">{{ 'Organisations'|trans  }}</a>
@@ -44,13 +51,14 @@
                             </li>
                         </ul>
                         <div>
-                            {% include 'locale.html.twig' %}                            
+                            {% include 'includes/locale.html.twig' %}                            
                         </div>
                     </div>
                 </nav>
             {% endblock %}
             <div id="content-wrapper" class="">
                 {% block body %}
+                    {{ render(controller('App\\Controller\\IndexController::filter')) }}
 
                 {% endblock %}
             </div>
@@ -58,9 +66,7 @@
 
             </footer>
         </div>
-
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+        {% block javascripts_2 %}
         {% endblock %}
     </body>
 </html>

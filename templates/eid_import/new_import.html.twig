@@ -1,6 +1,11 @@
 {# templates/eid_import/new_import.html.twig #}
 {% extends 'base.html.twig' %}
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
     <div class="container upload_form_container">
         <div class="row">
             <div class="col-sm-3"> </div>
@@ -25,5 +30,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+{% endblock %}
+{% block javascripts_2 %}
     {{ encore_entry_script_tags('form_upload') }}
 {% endblock %}

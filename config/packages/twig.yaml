@@ -4,3 +4,6 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:
         locales: '%locales%'
+        pos_color: ''
+        neg_color: ''
+        card_height: '%card_height%'

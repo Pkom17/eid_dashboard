@@ -1,0 +1,112 @@
+<div  class="col-xl-7 col-md-7">
+    <div  class="row">
+        <div class="col-xl-4 col-md-4 mb-4">
+            <div class="card border-left-primary shadow">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-0">{{ 'Total Test done'|trans}}</div>
+                            <div class="h5 mb-0 font-weight-bold text-primary"> <span class="summ_label">&nbsp;{{ tests['all_test'] }}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <div class="card border-left-success shadow ">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-0">{{ 'Total patient tested'|trans }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-success "><span class="summ_label">&nbsp;{{ patients['patient'] }}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-4 mb-4">
+            <div class="card border-left-info shadow">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-0">{{ 'Positivity'|trans }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-info "><span class="summ_label">&nbsp;{{ pos~"%" }}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-xl-5 col-md-5 mb-0">
+    <div class="card border-left-warning shadow">
+        <div id="summ_tat" style="height:88px;"></div>
+        <script>
+            $(function () {
+                var tat = new Highcharts.Chart({
+                chart: {
+                renderTo: "summ_tat"
+                },
+                        exporting: {
+                        buttons: {
+                        contextButton: {
+                        enabled: false
+                        }
+                        }
+                        },
+                        credits: {
+                        enabled: false
+                        },
+                        legend: {
+                        enabled: false,
+                                align: 'right',
+                                verticalAlign: 'top',
+                                layout: 'vertical',
+                                reversed: true
+                        },
+                        tooltip: {
+                        formatter: function () {
+                        var s = '<b>' + this.x + '</b>',
+                                sum = 0;
+                                var limits = [[{{limits[0][0]~','~limits[0][1]~'],['~limits[1][0]~','~limits[1][1]~'],['~limits[2][0]~','~limits[2][1]}}]];
+                                $.each(this.points, function (i, point) {
+                                s += '<br/> <span style="color: ' + point.series.color + '">\u25A0</span> ' + point.series.name + ': ' +
+                                        '<b>' + Math.abs(point.y) + '  {{'Jours'|trans}} (Min:' + limits[i][0] + ', Max:' + limits[i][1] + ')</b>';
+                                        sum += point.y;
+                                });
+                                s += '<br/>Total:  <b>' + Math.abs(sum) + ' {{'Jours'|trans}}</b>';
+                                return s;
+                        },
+                                shared: true
+
+                        },
+                        title: {
+                        text: ''
+                        },
+                        xAxis: {
+                        categories:{{categories|raw}}
+                        },
+                        yAxis: {
+                        min: 0,
+                                title: {
+                                align: 'low',
+                                        offset: 0,
+                                        text: '',
+                                        rotation: 0,
+                                        y: 6,
+                                        x: - 85
+                                }
+                        },
+                        plotOptions: {
+                        series: {
+                        stacking: 'normal'
+                        }
+                        },
+                        colors: ["#66FF66", "#FFFF66", "#FF6666"],
+                        series:{{series |raw}}.reverse()
+                });
+            });
+        </script> 
+    </div>
+</div>

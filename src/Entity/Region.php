@@ -46,94 +46,53 @@ class Region {
      */
     private $districts;
 
+
     public function __construct() {
         $this->districts = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
+    public function setName(string $name): self {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getDiisCode(): ?string
-    {
+    public function getDiisCode(): ?string {
         return $this->diisCode;
     }
 
-    public function setDiisCode(?string $diisCode): self
-    {
+    public function setDiisCode(?string $diisCode): self {
         $this->diisCode = $diisCode;
 
         return $this;
     }
 
-    public function getDatimCode(): ?string
-    {
+    public function getDatimCode(): ?string {
         return $this->datimCode;
     }
 
-    public function setDatimCode(?string $datimCode): self
-    {
+    public function setDatimCode(?string $datimCode): self {
         $this->datimCode = $datimCode;
 
         return $this;
     }
 
-    public function getActive(): ?bool
-    {
+    public function getActive(): ?bool {
         return $this->active;
     }
 
-    public function setActive(?bool $active): self
-    {
+    public function setActive(?bool $active): self {
         $this->active = $active;
 
         return $this;
     }
-
-    /**
-     * @return Collection|District[]
-     */
-    public function getDistricts(): Collection
-    {
-        return $this->districts;
-    }
-
-    public function addDistrict(District $district): self
-    {
-        if (!$this->districts->contains($district)) {
-            $this->districts[] = $district;
-            $district->setRegion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDistrict(District $district): self
-    {
-        if ($this->districts->contains($district)) {
-            $this->districts->removeElement($district);
-            // set the owning side to null (unless already changed)
-            if ($district->getRegion() === $this) {
-                $district->setRegion(null);
-            }
-        }
-
-        return $this;
-    }
-
-
 
 }

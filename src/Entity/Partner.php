@@ -35,10 +35,6 @@ class Partner {
      */
     private $sites;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EIDTest", mappedBy="partner")
-     */
-    private $eidTests;
 
     public function __construct() {
         $this->sites = new ArrayCollection();
@@ -87,33 +83,6 @@ class Partner {
         return $this;
     }
 
-    /**
-     * @return Collection|EIDTest[]
-     */
-    public function getEidTests(): Collection {
-        return $this->eidTests;
-    }
-
-    public function addEidTest(EIDTest $eidTest): self {
-        if (!$this->eidTests->contains($eidTest)) {
-            $this->eidTests[] = $eidTest;
-            $eidTest->setPartner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEidTest(EIDTest $eidTest): self {
-        if ($this->eidTests->contains($eidTest)) {
-            $this->eidTests->removeElement($eidTest);
-            // set the owning side to null (unless already changed)
-            if ($eidTest->getPartner() === $this) {
-                $eidTest->setPartner(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getActive(): ?bool
     {

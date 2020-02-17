@@ -83,217 +83,169 @@ class Site {
     protected $partner;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EIDTest", mappedBy="site")
+     * @ORM\ManyToOne(targetEntity="Region")
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      */
-    protected $eidTests;
+    protected $region;
+
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SiteContact", mappedBy="site")
      */
     protected $siteContacts;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getDiisCode(): ?string
-    {
+    public function getDiisCode(): ?string {
         return $this->diisCode;
     }
 
-    public function setDiisCode(?string $diisCode): self
-    {
+    public function setDiisCode(?string $diisCode): self {
         $this->diisCode = $diisCode;
 
         return $this;
     }
 
-    public function getName(): ?string
-    {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
+    public function setName(string $name): self {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getDatimCode(): ?string
-    {
+    public function getDatimCode(): ?string {
         return $this->datimCode;
     }
 
-    public function setDatimCode(string $datimCode): self
-    {
+    public function setDatimCode(string $datimCode): self {
         $this->datimCode = $datimCode;
 
         return $this;
     }
 
-    public function getDatimName(): ?string
-    {
+    public function getDatimName(): ?string {
         return $this->datimName;
     }
 
-    public function setDatimName(string $datimName): self
-    {
+    public function setDatimName(string $datimName): self {
         $this->datimName = $datimName;
 
         return $this;
     }
 
-    public function getPriority(): ?bool
-    {
+    public function getPriority(): ?bool {
         return $this->priority;
     }
 
-    public function setPriority(bool $priority): self
-    {
+    public function setPriority(bool $priority): self {
         $this->priority = $priority;
 
         return $this;
     }
 
-    public function getVlTest(): ?bool
-    {
+    public function getVlTest(): ?bool {
         return $this->vlTest;
     }
 
-    public function setVlTest(?bool $vlTest): self
-    {
+    public function setVlTest(?bool $vlTest): self {
         $this->vlTest = $vlTest;
 
         return $this;
     }
 
-    public function getEidTest(): ?bool
-    {
+    public function getEidTest(): ?bool {
         return $this->eidTest;
     }
 
-    public function setEidTest(?bool $eidTest): self
-    {
+    public function setEidTest(?bool $eidTest): self {
         $this->eidTest = $eidTest;
 
         return $this;
     }
 
-    public function getHivFollowup(): ?bool
-    {
+    public function getHivFollowup(): ?bool {
         return $this->hivFollowup;
     }
 
-    public function setHivFollowup(?bool $hivFollowup): self
-    {
+    public function setHivFollowup(?bool $hivFollowup): self {
         $this->hivFollowup = $hivFollowup;
 
         return $this;
     }
 
-    public function getLatitude(): ?string
-    {
+    public function getLatitude(): ?string {
         return $this->latitude;
     }
 
-    public function setLatitude(?string $latitude): self
-    {
+    public function setLatitude(?string $latitude): self {
         $this->latitude = $latitude;
 
         return $this;
     }
 
-    public function getLongitude(): ?string
-    {
+    public function getLongitude(): ?string {
         return $this->longitude;
     }
 
-    public function setLongitude(?string $longitude): self
-    {
+    public function setLongitude(?string $longitude): self {
         $this->longitude = $longitude;
 
         return $this;
     }
 
-    public function getActive(): ?bool
-    {
+    public function getActive(): ?bool {
         return $this->active;
     }
 
-    public function setActive(?bool $active): self
-    {
+    public function setActive(?bool $active): self {
         $this->active = $active;
 
         return $this;
     }
 
-    public function getDistrict(): ?District
-    {
+    public function getDistrict(): ?District {
         return $this->district;
     }
 
-    public function setDistrict(?District $district): self
-    {
+    public function setDistrict(?District $district): self {
         $this->district = $district;
 
         return $this;
     }
 
-    public function getPartner(): ?Partner
-    {
+    public function getPartner(): ?Partner {
         return $this->partner;
     }
 
-    public function setPartner(?Partner $partner): self
-    {
+    public function setPartner(?Partner $partner): self {
         $this->partner = $partner;
 
         return $this;
     }
-
-    /**
-     * @return Collection|EIDTest[]
-     */
-    public function getEidTests(): Collection
-    {
-        return $this->eidTests;
+    public function getRegion(): ?Region {
+        return $this->region;
     }
 
-    public function addEidTest(EIDTest $eidTest): self
-    {
-        if (!$this->eidTests->contains($eidTest)) {
-            $this->eidTests[] = $eidTest;
-            $eidTest->setSite($this);
-        }
+    public function setRegion(?Region $region): self {
+        $this->region = $region;
 
         return $this;
     }
 
-    public function removeEidTest(EIDTest $eidTest): self
-    {
-        if ($this->eidTests->contains($eidTest)) {
-            $this->eidTests->removeElement($eidTest);
-            // set the owning side to null (unless already changed)
-            if ($eidTest->getSite() === $this) {
-                $eidTest->setSite(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|SiteContact[]
      */
-    public function getSiteContacts(): Collection
-    {
+    public function getSiteContacts(): Collection {
         return $this->siteContacts;
     }
 
-    public function addSiteContact(SiteContact $siteContact): self
-    {
+    public function addSiteContact(SiteContact $siteContact): self {
         if (!$this->siteContacts->contains($siteContact)) {
             $this->siteContacts[] = $siteContact;
             $siteContact->setSite($this);
@@ -302,8 +254,7 @@ class Site {
         return $this;
     }
 
-    public function removeSiteContact(SiteContact $siteContact): self
-    {
+    public function removeSiteContact(SiteContact $siteContact): self {
         if ($this->siteContacts->contains($siteContact)) {
             $this->siteContacts->removeElement($siteContact);
             // set the owning side to null (unless already changed)
@@ -314,6 +265,5 @@ class Site {
 
         return $this;
     }
-
 
 }

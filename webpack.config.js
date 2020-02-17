@@ -26,6 +26,13 @@ Encore
          */
         .addEntry('app', './assets/js/app.js')
         .addEntry('form_upload', './assets/js/upload.js')
+        .addEntry('home', './assets/js/home.js')
+//        .addEntry('custom', './assets/js/custom.js')
+//        .addEntry('shim', './assets/js/shim.js')
+//        .addEntry('highcharts', './assets/js/highcharts.js')
+//        .addEntry('exporting', './assets/js/exporting.js')
+//        .addEntry('export_data', './assets/js/export-data.js')
+//        .addEntry('accessibility', './assets/js/accessibility.js')
         //.addEntry('page2', './assets/js/page2.js')
 
         // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

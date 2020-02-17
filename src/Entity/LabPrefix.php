@@ -36,7 +36,7 @@ class LabPrefix {
     protected $vlPrefix;
 
     /**
-     * @ORM\ManyToOne(targetEntity="plateforme", inversedBy="lab_prefixes")
+     * @ORM\ManyToOne(targetEntity="Plateforme", inversedBy="labPrefixes")
      * @ORM\JoinColumn(name="plateforme_id", referencedColumnName="id")
      */
     protected $plateforme;

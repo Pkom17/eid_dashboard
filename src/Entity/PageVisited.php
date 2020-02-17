@@ -44,7 +44,7 @@ class PageVisited {
     protected $lastVisitedDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Visitor", inversedBy="pagesVisited")
+     * @ORM\ManyToOne(targetEntity="Visitor")
      * @ORM\JoinColumn(name="visitor_id", referencedColumnName="id")
      */
     protected $visitor;

@@ -47,4 +47,15 @@ class SiteRepository extends ServiceEntityRepository
         ;
     }
     */
+    
+        public function findSites() {
+        $sql = 'select id,datim_code,district_id,region_id,partner_id from site';
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+        $stmt->closeCursor();
+        $conn->close();
+        return $data;
+    }
 }
