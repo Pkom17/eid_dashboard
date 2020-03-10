@@ -1,0 +1,52 @@
+<div id="trends_month">
+
+</div>
+<script>
+    $(function () {
+    var trends = new Highcharts.Chart({
+    chart: {
+    renderTo: "trends_month"
+    },
+            exporting: {
+            enable: true
+            },
+            credits: {
+            enabled: false
+            },
+            series:{{ series |raw}},
+            title: {
+            text: null
+            },
+            tooltip: {
+            borderColor: "#999",
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    shadow: false,
+                    yDecimals: 1,
+                    valueDecimale: 1,
+                    useHTML: true,
+                    headerFormat: '<table class="tip"><thead><tr><th>{point.key}</th></tr><thead><tbody>',
+                    pointFormat: '<tr><th style="color:{series.color}">{series.name}:</th><td style="text-align:right">{point.y}</td></tr>',
+                    footerFormat: '</tbody></table>'
+            },
+            xAxis: {
+            categories:{{ categories |raw}},
+            },
+            yAxis:
+    {
+    title: {
+    text: '{{"Positivity"|trans}} (%)'
+    },
+            stackLabels: {
+            rotation: 0,
+                    enabled: true,
+                    style: {
+                    fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    },
+                    y: - 10
+            }
+    }
+    });
+    });
+</script>

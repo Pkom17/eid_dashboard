@@ -46,6 +46,32 @@ class IndexController extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/org_filter", name="app_filter")
+     */
+    public function orgFilter(Request $request) {
+        $regions = $this->getDoctrine()->getRepository(\App\Entity\Region::class)->findRegions();
+        return $this->render('includes/org_filter.html.twig', [
+                    'regions' => $regions,
+        ]);
+    }
+
+    /**
+     * @Route("/get_districts/{region}", name="app_get_districts_by_region",requirements={"region"="-?\d+"})
+     */
+    public function getDistrictsByRegion(Request $request, $region) {
+        $districts = $this->getDoctrine()->getRepository(\App\Entity\District::class)->findDistrictsByRegion($region);
+        return new \Symfony\Component\HttpFoundation\JsonResponse($districts);
+    }
+
+    /**
+     * @Route("/get_sites/{district}", name="app_get_sites_by_district",requirements={"district"="-?\d+"})
+     */
+    public function getSitesByDistrict(Request $request, $district) {
+        $sites = $this->getDoctrine()->getRepository(\App\Entity\Site::class)->findSitesByDistrict($district);
+        return new \Symfony\Component\HttpFoundation\JsonResponse($sites);
+    }
+
     public function getTAT() {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
         $start = $this->get('session')->get("startDate");
@@ -176,7 +202,7 @@ class IndexController extends AbstractController {
     }
 
     /**
-     * @Route("/tests_trends/{which_pcr}", name="home_tests_trends")
+     * @Route("/tests_trends/{which_pcr}", name="home_tests_trends",requirements={"which_pcr"="-?\d+"})
      */
     public function testTrends(Request $request, TranslatorInterface $translator, int $which_pcr = 0) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
@@ -197,12 +223,12 @@ class IndexController extends AbstractController {
             $end_year = intval(date("Y"));
             $end_month = intval(date("m"));
         }
-        $start2 =  intval(substr($start, 0, 4).'01');
+        $start2 = intval(substr($start, 0, 4) . '01');
         $outcomes = $eidRepo->getEIDTestingTrends($which_pcr, $start2, $end);
 
         $d = [];
         $periodes = [];
-//recuperer d'abord annee et mois
+
         $i = 0;
         for ($j = $start_year; $j <= $end_year; $j++) {
             for ($k = 1; $k <= 12; $k++) {
@@ -229,19 +255,24 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         foreach ($periodes as $p) {
             foreach ($outcomes as $entry) {
                 if ($entry['year'] == $p['year'] && $entry['month'] == $p['month']) {
                     $d[0]['data'][] = intval($entry['positif']);
                     $d[1]['data'][] = intval($entry['negatif']);
-                    if (intval($entry['negatif'] + intval($entry['positif'])) == 0) {
-                        $d[2]['data'][] = 0;
+                    $d[2]['data'][] = intval($entry['invalide']);
+                    if (intval($entry['negatif'] + intval($entry['positif']) + intval($entry['invalide'])) == 0) {
+                        $d[3]['data'][] = 0;
                     } else {
-                        $d[2]['data'][] = floatval(number_format((intval($entry['positif']) / (intval($entry['negatif'] + intval($entry['positif'])))) * 100, 2));
+                        $d[3]['data'][] = floatval(number_format((intval($entry['positif']) / (intval($entry['negatif'] + intval($entry['positif']) + intval($entry['invalide'])))) * 100, 2));
                     }
                     continue(2);
                 }
@@ -249,6 +280,7 @@ class IndexController extends AbstractController {
             $d[0]['data'][] = 0;
             $d[1]['data'][] = 0;
             $d[2]['data'][] = 0;
+            $d[3]['data'][] = 0;
         }
 
         return $this->render('home/test_trends.html.twig', [
@@ -267,14 +299,17 @@ class IndexController extends AbstractController {
                 0 => [
                     'positif' => 0,
                     'negatif' => 0,
+                    'invalide' => 0,
                 ],
                 1 => [
                     'positif' => 0,
                     'negatif' => 0,
+                    'invalide' => 0,
                 ],
                 2 => [
                     'positif' => 0,
                     'negatif' => 0,
+                    'invalide' => 0,
                 ],
             ];
         }
@@ -303,13 +338,17 @@ class IndexController extends AbstractController {
         $d = [];
         $d[0]['name'] = $translator->trans('Positive');
         $d[1]['name'] = $translator->trans('Negative');
+        $d[2]['name'] = $translator->trans('Invalide');
         $d[0]['y'] = 0;
         $d[0]['color'] = $this->getParameter('pos_color');
         $d[1]['y'] = 0;
         $d[1]['color'] = $this->getParameter('neg_color');
+        $d[2]['y'] = 0;
+        $d[2]['color'] = $this->getParameter('inv_color');
         foreach ($outcomes as $entry) {
             $d[0]['y'] += $entry['positif'];
             $d[1]['y'] += $entry['negatif'];
+            $d[2]['y'] += $entry['invalide'];
         }
 
         return $this->render('home/test_outcomes.html.twig', [
@@ -359,25 +398,31 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
         foreach ($ages as $age) {
             $d[0]['data'][$u] = 0;
             $d[1]['data'][$u] = 0;
             $d[2]['data'][$u] = 0;
+            $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
                 if ($entry['age_month'] >= $age['limits'][0] && $entry['age_month'] < $age['limits'][1]) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
+                    $d[2]['data'][$u] += intval($entry['invalide']);
                 }
             }
-            if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-                $d[2]['data'][$u] += 0;
+            if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+                $d[3]['data'][$u] += 0;
             } else {
-                $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
             }
             $u++;
         }
@@ -387,16 +432,18 @@ class IndexController extends AbstractController {
         $d[0]['data'][$nb_age] = 0;
         $d[1]['data'][$nb_age] = 0;
         $d[2]['data'][$nb_age] = 0;
+        $d[3]['data'][$nb_age] = 0;
         foreach ($outcomes as $entry) {
             if ($entry['age_month'] < 0 || !is_numeric($entry['age_month'])) {
                 $d[0]['data'][$nb_age] += intval($entry['positif']);
                 $d[1]['data'][$nb_age] += intval($entry['negatif']);
+                $d[2]['data'][$nb_age] += intval($entry['invalide']);
             }
         }
-        if ($d[0]['data'][$nb_age] + $d[1]['data'][$nb_age] == 0) {
-            $d[2]['data'][$nb_age] += 0;
+        if ($d[0]['data'][$nb_age] + $d[1]['data'][$nb_age] + $d[2]['data'][$nb_age] == 0) {
+            $d[3]['data'][$nb_age] += 0;
         } else {
-            $d[2]['data'][$nb_age] += floatval(number_format(($d[0]['data'][$nb_age] / ($d[0]['data'][$nb_age] + $d[1]['data'][$nb_age])) * 100, 2));
+            $d[3]['data'][$nb_age] += floatval(number_format(($d[0]['data'][$nb_age] / ($d[0]['data'][$nb_age] + $d[1]['data'][$nb_age] + $d[2]['data'][$nb_age])) * 100, 2));
         }
         return $this->render('home/test_outcomes_age.html.twig', [
                     'series' => json_encode($d),
@@ -443,25 +490,31 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
         foreach ($status as $stat) {
             $d[0]['data'][$u] = 0;
             $d[1]['data'][$u] = 0;
             $d[2]['data'][$u] = 0;
+            $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
                 if ($entry['hiv_status'] == $stat['name']) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
+                    $d[2]['data'][$u] += intval($entry['invalide']);
                 }
             }
-            if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-                $d[2]['data'][$u] += 0;
+            if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+                $d[3]['data'][$u] += 0;
             } else {
-                $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
             }
             $u++;
         }
@@ -470,16 +523,18 @@ class IndexController extends AbstractController {
         $d[0]['data'][$u] = 0;
         $d[1]['data'][$u] = 0;
         $d[2]['data'][$u] = 0;
+        $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
             if (is_null($entry['hiv_status'])) {
                 $d[0]['data'][$u] += intval($entry['positif']);
                 $d[1]['data'][$u] += intval($entry['negatif']);
+                $d[2]['data'][$u] += intval($entry['invalide']);
             }
         }
-        if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-            $d[2]['data'][$u] += 0;
+        if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+            $d[3]['data'][$u] += 0;
         } else {
-            $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+            $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
         }
         return $this->render('home/test_outcomes_mother_status.html.twig', [
                     'series' => json_encode($d),
@@ -525,25 +580,31 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
         foreach ($types as $type) {
             $d[0]['data'][$u] = 0;
             $d[1]['data'][$u] = 0;
             $d[2]['data'][$u] = 0;
+            $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
                 if ($entry['clinic'] == $type) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
+                    $d[2]['data'][$u] += intval($entry['invalide']);
                 }
             }
-            if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-                $d[2]['data'][$u] += 0;
+            if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+                $d[3]['data'][$u] += 0;
             } else {
-                $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
             }
             $u++;
         }
@@ -551,16 +612,18 @@ class IndexController extends AbstractController {
         $d[0]['data'][$u] = 0;
         $d[1]['data'][$u] = 0;
         $d[2]['data'][$u] = 0;
+        $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
             if (is_null($entry['clinic'])) {
                 $d[0]['data'][$u] += intval($entry['positif']);
                 $d[1]['data'][$u] += intval($entry['negatif']);
+                $d[2]['data'][$u] += intval($entry['invalide']);
             }
         }
-        if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-            $d[2]['data'][$u] += 0;
+        if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+            $d[3]['data'][$u] += 0;
         } else {
-            $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+            $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
         }
         return $this->render('home/test_outcomes_clinic.html.twig', [
                     'series' => json_encode($d),
@@ -607,25 +670,31 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
         foreach ($types as $type) {
             $d[0]['data'][$u] = 0;
             $d[1]['data'][$u] = 0;
             $d[2]['data'][$u] = 0;
+            $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
                 if ($entry['mother_regimen'] == $type) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
+                    $d[2]['data'][$u] += intval($entry['invalide']);
                 }
             }
-            if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-                $d[2]['data'][$u] += 0;
+            if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+                $d[3]['data'][$u] += 0;
             } else {
-                $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
             }
             $u++;
         }
@@ -634,16 +703,18 @@ class IndexController extends AbstractController {
         $d[0]['data'][$u] = 0;
         $d[1]['data'][$u] = 0;
         $d[2]['data'][$u] = 0;
+        $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
             if (is_null($entry['mother_regimen'])) {
                 $d[0]['data'][$u] += intval($entry['positif']);
                 $d[1]['data'][$u] += intval($entry['negatif']);
+                $d[2]['data'][$u] += intval($entry['invalide']);
             }
         }
-        if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-            $d[2]['data'][$u] += 0;
+        if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+            $d[3]['data'][$u] += 0;
         } else {
-            $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+            $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
         }
         return $this->render('home/test_outcomes_mother_regimen.html.twig', [
                     'series' => json_encode($d),
@@ -690,25 +761,31 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
         foreach ($types as $type) {
             $d[0]['data'][$u] = 0;
             $d[1]['data'][$u] = 0;
             $d[2]['data'][$u] = 0;
+            $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
                 if ($entry['infant_arv'] == $type) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
+                    $d[2]['data'][$u] += intval($entry['invalide']);
                 }
             }
-            if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-                $d[2]['data'][$u] += 0;
+            if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+                $d[3]['data'][$u] += 0;
             } else {
-                $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
             }
             $u++;
         }
@@ -717,16 +794,18 @@ class IndexController extends AbstractController {
         $d[0]['data'][$u] = 0;
         $d[1]['data'][$u] = 0;
         $d[2]['data'][$u] = 0;
+        $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
             if (is_null($entry['infant_arv'])) {
                 $d[0]['data'][$u] += intval($entry['positif']);
                 $d[1]['data'][$u] += intval($entry['negatif']);
+                $d[2]['data'][$u] += intval($entry['negatif']);
             }
         }
-        if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-            $d[2]['data'][$u] += 0;
+        if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+            $d[3]['data'][$u] += 0;
         } else {
-            $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+            $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
         }
         return $this->render('home/test_outcomes_infant_arv.html.twig', [
                     'series' => json_encode($d),
@@ -773,25 +852,32 @@ class IndexController extends AbstractController {
         $d[1]['type'] = 'column';
         $d[1]['color'] = $this->getParameter('neg_color');
         $d[1]['yAxis'] = 1;
-        $d[2]['name'] = $translator->trans('Positivité');
-        $d[2]['type'] = 'spline';
-        $d[2]['color'] = $this->getParameter('pos_color2');
-        $d[2]['tooltip']['valueSuffix'] = " %";
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
         foreach ($types as $type) {
             $d[0]['data'][$u] = 0;
             $d[1]['data'][$u] = 0;
             $d[2]['data'][$u] = 0;
+            $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
                 if ($entry['region'] == $type) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
+                    $d[2]['data'][$u] += intval($entry['invalide']);
                 }
             }
-            if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-                $d[2]['data'][$u] += 0;
+            $total = $d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u];
+            if ($total == 0) {
+                $d[3]['data'][$u] += 0;
             } else {
-                $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($total)) * 100, 2));
             }
             $u++;
         }
@@ -800,16 +886,18 @@ class IndexController extends AbstractController {
         $d[0]['data'][$u] = 0;
         $d[1]['data'][$u] = 0;
         $d[2]['data'][$u] = 0;
+        $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
             if (is_null($entry['region'])) {
                 $d[0]['data'][$u] += intval($entry['positif']);
                 $d[1]['data'][$u] += intval($entry['negatif']);
+                $d[2]['data'][$u] += intval($entry['invalide']);
             }
         }
-        if ($d[0]['data'][$u] + $d[1]['data'][$u] == 0) {
-            $d[2]['data'][$u] += 0;
+        if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
+            $d[3]['data'][$u] += 0;
         } else {
-            $d[2]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u])) * 100, 2));
+            $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
         }
         return $this->render('home/test_outcomes_region.html.twig', [
                     'series' => json_encode($d),

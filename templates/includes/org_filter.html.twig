@@ -1,0 +1,38 @@
+{# templates/includes/org_filter.html.twig #}
+<div class="pane_filter row">
+    <div class="col-md-10">
+        <div class="row">
+            <input type="hidden" id="org_level" value="0"/>
+            <div class="col-md-4 mb-4">
+                <label for="org_region">
+                    {{ 'Régions:'|trans }}
+                </label>
+                <select name="org_region" id="org_region" class="form-control form-control-sm">
+                    <option></option>
+                    <option value="0"> {{ 'Toutes les régions'|trans }} </option>
+                    {% for region in regions %}
+                         <option value="{{ region['id'] }}"> {{ region['name'] }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="org_district">
+                    {{ 'Districts:'|trans }}
+                </label>
+                <select name="org_district" id="org_district" class="form-control form-control-sm">
+                    <option></option>
+                    <option value="0"> {{ 'Tous les districts'|trans }} </option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="org_site">
+                    {{ 'Sites:'|trans }}
+                </label>
+                <select name="org_site" id="org_site" class="form-control form-control-sm">
+                    <option> </option>
+                    <option value="0"> {{ 'Tous les sites'|trans }} </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

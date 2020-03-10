@@ -1,0 +1,45 @@
+{# templates/labs/stats.html.twig #}
+
+<div id="eid_plateforme_stats">
+    <div class="table-responsive">
+        <table id="lab_stats_{{app.request.locale}}" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>{{ 'N°'|trans }}</th>
+                    <th>{{ 'Plateforme'|trans }}</th>
+                    <th>{{ 'Total des Tests'|trans }}</th>
+                    <th>{{ 'Total positif'|trans }}</th>
+                    <th>{{ 'Total negatif'|trans }}</th>
+                    <th>{{ 'Total invalide'|trans }}</th>
+                    <th>{{ 'Tests PCR 1'|trans }}</th>
+                    <th>{{ 'Tests PCR 1 positif'|trans }}</th>
+                    <th>{{ 'Tests PCR 2'|trans }}</th>
+                    <th>{{ 'Tests PCR 2 positif'|trans }}</th>
+                    <th>{{ 'Tests PCR invalide'|trans }}</th>
+                    <th>{{ 'Tests PCR invalide positif'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set n = 1 %}
+                {% for stat in stats %}
+                    <tr>
+                        <td>{{ n }}</td>
+                        <td>{{ stat['plateforme'] }}</td>
+                        <td>{{ stat['total'] }}</td>
+                        <td>{{ stat['positif'] }}</td>
+                        <td>{{ stat['negatif'] }}</td>
+                        <td>{{ stat['invalide'] }}</td>
+                        <td>{{ stat['pcr_1'] }}</td>
+                        <td>{{ stat['pcr_1_positif'] }}</td>
+                        <td>{{ stat['pcr_2'] }}</td>
+                        <td>{{ stat['pcr_2_positif'] }}</td>
+                        <td>{{ stat['pcr_non_precise'] }}</td>
+                        <td>{{ stat['pcr_non_precise_positif'] }}</td>
+                    </tr>
+                    {% set n = n+1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>

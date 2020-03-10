@@ -191,6 +191,73 @@ class EIDTestRepository extends ServiceEntityRepository {
         return $results;
     }
 
+        public function getEIDTrendsByYear($region_id,$district_id,$site_id, $age_month_min, $age_month_max,$which_pcr, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_trends_year (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => $region_id,
+                    'district_id' => $district_id,
+                    'site_id' => $site_id,
+                    'age_month_min' => $age_month_min,
+                    'age_month_max' => $age_month_max,
+                    'which_pcr' => $which_pcr,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+        public function getEIDTrendsByQuarter($region_id,$district_id,$site_id, $age_month_min, $age_month_max,$which_pcr, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_trends_quarter (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => $region_id,
+                    'district_id' => $district_id,
+                    'site_id' => $site_id,
+                    'age_month_min' => $age_month_min,
+                    'age_month_max' => $age_month_max,
+                    'which_pcr' => $which_pcr,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+        public function getEIDTrendsByMonth($region_id,$district_id,$site_id, $age_month_min, $age_month_max,$which_pcr, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => $region_id,
+                    'district_id' => $district_id,
+                    'site_id' => $site_id,
+                    'age_month_min' => $age_month_min,
+                    'age_month_max' => $age_month_max,
+                    'which_pcr' => $which_pcr,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+    
     public function getEIDTestSummary($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();

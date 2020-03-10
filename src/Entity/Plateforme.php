@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Site;
 
 /**
  * Description of Plateforme
@@ -38,7 +39,7 @@ class Plateforme {
     protected $labLocation;
 
     /**
-     * @ORM\ManyToOne(targetEntity="site")
+     * @ORM\ManyToOne(targetEntity="Site")
      * @ORM\JoinColumn(name="site_id", referencedColumnName="id",nullable=true)
      */
     protected $site;
@@ -94,12 +95,12 @@ class Plateforme {
         return $this;
     }
 
-    public function getSite(): ?site
+    public function getSite(): ?Site
     {
         return $this->site;
     }
 
-    public function setSite(?site $site): self
+    public function setSite(?Site $site): self
     {
         $this->site = $site;
 

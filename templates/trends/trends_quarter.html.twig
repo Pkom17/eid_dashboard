@@ -1,0 +1,91 @@
+<div id="trends_quarter">
+
+</div>
+<script>
+    $(function () {
+    var trends = new Highcharts.Chart({
+    chart: {
+    renderTo: "trends_quarter"
+    },
+            exporting: {
+            enable: true
+            },
+            credits: {
+            enabled: false
+            },
+            plotOptions: {
+            column: {
+            stacking: "normal",
+                    dataLabels: {
+                    enabled: false
+                    }
+            }, spline: {
+            lineWidth: 2,
+                    marker: {
+                    fillColor: '#00ff99',
+                            lineWidth: 2,
+                            lineColor: '#3498eb',
+                            symbol: "circle"
+                    },
+                    states: {
+                    hover: {
+                    enabled: true
+                    }
+                    }
+            }
+            },
+            series:{{ series |raw}},
+            title: {
+            text: null
+            },
+            tooltip: {
+            shared: true,
+                    borderColor: "#999",
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    shadow: false,
+                    yDecimals: 1,
+                    valueDecimale: 1,
+                    useHTML: true,
+                    headerFormat: '<table class="tip"><thead><tr><th>{point.key}</th></tr><thead><tbody>',
+                    pointFormat: '<tr><th style="color:{series.color}">{series.name}:</th><td style="text-align:right">{point.y}</td></tr>',
+                    footerFormat: '<tr><th>Total:</th><td style="text-align:right"><b>{point.total}</b></td></tr></tbody></table>'
+            },
+            xAxis: {
+            categories:{{ categories |raw}},
+            },
+            yAxis: [
+            {// for spline
+            labels: {
+            formatter: function() {
+            return Highcharts.numberFormat(this.value, 1) + '%';
+            },
+                    style: {
+
+                    }
+            },
+                    title: {
+                    text: '{{'Percentage'|trans}}',
+                            style: {
+                            color: '#3498eb'
+                            }
+                    },
+                    opposite: true
+            },
+            { // for stacked column
+            title: {
+            text: '{{"Tests"|trans}}'
+            },
+                    stackLabels: {
+                    rotation: 0,
+                            enabled: true,
+                            style: {
+                            fontWeight: 'bold',
+                                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            },
+                            y: - 10
+                    }
+            }]
+    });
+    });
+</script>

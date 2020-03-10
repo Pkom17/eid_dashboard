@@ -13,6 +13,24 @@ import '../css/main.css';
 import 'bootstrap';
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
+
+import 'datatables.net-dt/js/dataTables.dataTables.min.js'
+import 'datatables.net-buttons-dt/js/buttons.dataTables.min.js'
+import 'datatables.net-buttons-dt/css/buttons.dataTables.min.css'
+
+import 'datatables.net-bs4/js/dataTables.bootstrap4.min.js'
+
+import 'datatables.net-buttons/js/dataTables.buttons.min.js'
+import 'datatables.net-buttons/js/buttons.html5.min.js'
+import 'datatables.net-buttons/js/buttons.colVis.min.js'
+
+import 'datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js'
+
+import jsZip from 'jszip';
+window.JSZip = jsZip;
+
+import 'select2';
+import 'select2/dist/css/select2.css';
 var Highcharts = require('highcharts');
 require('highcharts/modules/exporting')(Highcharts);
 global.Highcharts = Highcharts;
@@ -20,7 +38,7 @@ const setDateFilter = require('./setDateFilter');
 const resetDateFilter = require('./resetDateFilter');
 global.setDateFilter = setDateFilter;
 global.resetDateFilter = resetDateFilter;
-global.$.datepicker= $.datepicker;
+global.$.datepicker = $.datepicker;
 
 
 (function ($) {
@@ -122,7 +140,6 @@ $(document).ready(function () {
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(year, month, 1));
         }
-
     });
 
     $('#startDate_en,#endDate_en').datepicker({
@@ -151,7 +168,7 @@ $(document).ready(function () {
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(year, month, 1));
         }
-
     });
+
 
 });

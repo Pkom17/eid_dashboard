@@ -11,6 +11,7 @@ parameters:
     pos_color: '#fc6860'
     pos_color2: '#3498eb'
     neg_color: '#36bd53'
+    inv_color: '#000000'
     card_height: '350px'
     default_pcr: 0
 

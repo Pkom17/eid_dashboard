@@ -30,6 +30,39 @@ class EIDAgeCategoryRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+    public function getAgesCategoriesNames() {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = " select id,name from eid_age_category";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute();
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getAgeCategoryLimit($id) {
+        $result = false;
+        $conn = $this->getEntityManager()->getConnection();
+        $query = " select age_min,age_max from eid_age_category where id = :id";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute([
+            'id' => $id,
+        ]);
+        if ($exec) {
+            $result = $prep->fetch(\PDO::FETCH_ASSOC);
+        }
+        if ($result === false) {
+            $result = [
+            'age_min' => -1,
+            'age_max' => -1,
+            ];
+        }
+        $conn->close();
+        return $result;
+    }
 
     // /**
     //  * @return EIDAgeCategory[] Returns an array of EIDAgeCategory objects

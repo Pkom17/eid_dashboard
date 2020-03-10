@@ -1,8 +1,199 @@
 {# templates/trends/index.html.twig #}
 {% extends 'base.html.twig' %}
-{% block body %}
-    
-{% endblock %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
+{% block javascripts_2 %}
+    <script>
+        resetDistricts = function () {
+            var options = '<option></option>';
+            options += '<option value="0"> {{ 'Tous les districts'|trans }} </option>';
+            $('#org_district').html(options);
+            $('#org_district').select2({
+                placeholder: '{{'Choisir un district'|trans}}'
+            });
+        };
+        resetSites = function () {
+            var options = '<option></option>';
+            options += '<option value="0"> {{ 'Tous les sites'|trans }} </option>';
+            $('#org_site').html(options);
+            $('#org_site').select2({
+                placeholder: '{{'Choisir un site'|trans}}'
+            });
+        };
+
+        $(document).ready(function () {
+            $('#org_region').select2({
+                placeholder: '{{'Choisir une région'|trans}}'
+            });
+            $('#org_district').select2({
+                placeholder: '{{'Choisir un district'|trans}}'
+            });
+            $('#org_site').select2({
+                placeholder: '{{'Choisir un site'|trans}}'
+            });
+
+            $('#org_region').on("change", function () {
+                var region_id = $(this).val();
+                resetSites();
+                resetDistricts();
+                $.post('get_districts/' + region_id, null, function (data) {
+                    var l = data.length;
+                    var options = '<option></option>';
+                    options += '<option value="0"> {{ 'Tous les districts'|trans }} </option>';
+                    for (var i = 0; i < l; i++) {
+                        options += '<option value="' + data[i].id + '"> ' + data[i].name + ' </option>';
+                    }
+                    $('#org_district').html(options);
+                    $('#org_district').select2({
+                        placeholder: '{{'Choisir un district'|trans}}'
+                    });
+                });
+            });
+
+            $('#org_district').on("change", function () {
+                var region_id = $(this).val();
+                resetSites();
+                $.post('get_sites/' + region_id, null, function (data) {
+                    var l = data.length;
+                    var options = '<option></option>';
+                    options += '<option value="0"> {{ 'Tous les sites'|trans }} </option>';
+                    for (var i = 0; i < l; i++) {
+                        options += '<option value="' + data[i].id + '"> ' + data[i].name + ' </option>';
+                    }
+                    $('#org_site').html(options);
+                    $('#org_site').select2({
+                        placeholder: '{{'Choisir un site'|trans}}'
+                    });
+
+                });
+            });
+
+        });
+    </script>
+    {{ encore_entry_script_tags('trends') }}
+{% endblock %}
+{% block body %}
+    {{ render(controller('App\\Controller\\IndexController::orgFilter')) }}
+    <div class="row sum_lane_1">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <div class="row"> 
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances des tests par année'|trans|upper }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-5 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Rang PCR'|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_pcr_year" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    <option value="1">{{'1er PCR'|trans  }}</option>
+                                    <option value="2">{{'2eme PCR'|trans  }}</option>
+                                    <option value="-1">{{'Non défini'|trans  }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Classe d\'âge'|raw|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_age_year" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    {% for age in ages %}
+                                        <option value="{{ age['id'] }}">{{ age['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="card_trends_year">
+                    {{ render(controller('App\\Controller\\TrendsController::testTrendsByYear')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_2">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <div class="row"> 
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances des tests par trimestre'|trans|upper }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-5 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Rang PCR'|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_pcr_quarter" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    <option value="1">{{'1er PCR'|trans  }}</option>
+                                    <option value="2">{{'2eme PCR'|trans  }}</option>
+                                    <option value="-1">{{'Non défini'|trans  }}</option>
+                                </select>
+
+                            </div>
+                            <div class="col-md-6 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Classe d\'âge'|raw|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_age_quarter" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    {% for age in ages %}
+                                        <option value="{{ age['id'] }}">{{ age['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="card_trends_quarter">
+                    {{ render(controller('App\\Controller\\TrendsController::testTrendsByQuarter')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_3">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <div class="row"> 
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances de positivité'|trans|upper }}</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-5 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Rang PCR'|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_pcr_month" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    <option value="1">{{'1er PCR'|trans  }}</option>
+                                    <option value="2">{{'2eme PCR'|trans  }}</option>
+                                    <option value="-1">{{'Non défini'|trans  }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Classe d\'âge'|raw|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_age_month" class="form-control form-control-sm">
+                                    <option value="0">{{'Tout'|trans  }}</option>
+                                    {% for age in ages %}
+                                        <option value="{{ age['id'] }}">{{ age['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="card_trends_month">
+                    {{ render(controller('App\\Controller\\TrendsController::testTrendsByMonth')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}  
