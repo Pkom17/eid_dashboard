@@ -160,7 +160,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_type_clinic` (IN which_pcr INT(1), IN `f
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by age_month");
+    SET @QUERY = CONCAT(@QUERY, " group by age_month,clinic");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
@@ -182,7 +182,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_mother_regimen` (IN which_pcr INT(1), IN
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by age_month");
+    SET @QUERY = CONCAT(@QUERY, " group by age_month,mother_regimen");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
@@ -205,7 +205,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_infant_arv` (IN which_pcr INT(1), IN `fr
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by age_month");
+    SET @QUERY = CONCAT(@QUERY, " group by age_month,infant_arv");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
@@ -227,7 +227,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_hiv_status` (IN which_pcr INT(1), IN `fr
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by age_month");
+    SET @QUERY = CONCAT(@QUERY, " group by age_month,hiv_status");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
