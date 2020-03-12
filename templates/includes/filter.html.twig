@@ -15,10 +15,10 @@
                 </div>
                 <input name="endDate" id="endDate_{{app.request.locale}}" class="form-control form-control-sm date-picker" placeholder="{{ 'A:'|trans }}" />
                 <div class="input-group-append">
-                    <button type="button" id="filter" class="btn btn-sm   btn-outline-secondary date-pickerBtn" style="" onclick="setDateFilter('{{app.request.locale}}')"><center>{{ 'Filtrer'|trans }}</center></button>
+                    <button type="button" id="filter" class="btn btn-sm   btn-outline-secondary date-pickerBtn" style="" onclick="setDateFilter('{{path('app_date_filter')}}','{{app.request.locale}}')"><center>{{ 'Filtrer'|trans }}</center></button>
                 </div>
                 <div class="input-group-append">
-                    &nbsp;<button type="button" id="reset_date_filter" class="btn btn-sm btn-outline-secondary date-pickerBtn" style="" onclick="resetDateFilter('{{app.request.locale}}')"><center>{{ 'Annuler'|trans }}</center></button>
+                    &nbsp;<button type="button" id="reset_date_filter" class="btn btn-sm btn-outline-secondary date-pickerBtn" style="" onclick="resetDateFilter('{{path('app_reset_date_filter')}}')"><center>{{ 'Annuler'|trans }}</center></button>
                 </div>
             </div>
         </div>

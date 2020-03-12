@@ -1,9 +1,7 @@
-module.exports = function (locale) {
-    var startDate = $('#startDate_' + locale).val();
-    var endDate = $('#endDate_' + locale).val();
+module.exports = function (path) {
     $.ajax({
         type: "POST",
-        url: '/' + locale + '/reset_date_filter',
+        url: path,
         success: function (d) {
             location.reload();
         }
