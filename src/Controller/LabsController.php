@@ -21,16 +21,8 @@ class LabsController extends AbstractController {
      * @Route("/labs", name="app_labs")
      */
     public function index(Request $request, TranslatorInterface $translator) {
-        $start = $this->get('session')->get("startDate");
-        $start_for_trends = $start;
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-            $start_for_trends = intval(intval(date("Y")) - 1 . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         return $this->render('labs/index.html.twig', [
                     'start' => $translator->trans(Util::MONTHS[substr($start, 4, 2)]) . ' ' . substr($start, 0, 4),
                     'end' => $translator->trans(Util::MONTHS[substr($end, 4, 2)]) . ' ' . substr($end, 0, 4),
@@ -41,16 +33,9 @@ class LabsController extends AbstractController {
      * @Route("/labs/labs_stat", name="app_labs_stats")
      */
     public function labsStat(Request $request, TranslatorInterface $translator) {
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $rows = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->getEidOutcomesLabsStats($start, $end);
-        // $plateformes = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->findPlateformes();
         return $this->render('labs/stats.html.twig', [
                     'stats' => $rows,
         ]);
@@ -60,14 +45,8 @@ class LabsController extends AbstractController {
      * @Route("/labs/labs_stat_age/{which_pcr}", name="app_labs_stats_age",requirements={"which_pcr"="-?\d+"})
      */
     public function labsStatAge(Request $request, TranslatorInterface $translator, int $which_pcr = 0) {
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $rows = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->getEidOutcomesLabsAge($which_pcr, $start, $end);
         $plateformes = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->findPlateformes();
         $agesCategories = $this->getDoctrine()->getRepository(\App\Entity\EIDAgeCategory::class)->getAgesCategories();
@@ -136,8 +115,32 @@ class LabsController extends AbstractController {
         // $plateformes = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->findPlateformes();
         $data = '';
         return $this->render('labs/labs_tat.html.twig', [
-                   // 'stats' => $rows,
+                        // 'stats' => $rows,
         ]);
+    }
+
+    private function getStartDateForFilter() {
+        $start = $this->get('session')->get("startDate");
+        if (null === $start) {
+            $start = intval((intval(date("Y")) - 1) . date("m"));
+        }
+        return $start;
+    }
+
+    private function getStartDateForTrendsFilter() {
+        $start_for_trends = $this->get('session')->get("startDate");
+        if (null === $start_for_trends) {
+            $start_for_trends = intval(intval(date("Y")) - 1 . '01');
+        }
+        return $start_for_trends;
+    }
+
+    private function getEndDateForFilter() {
+        $end = $this->get('session')->get("endDate");
+        if (null === $end) {
+            $end = intval(date("Ym"));
+        }
+        return $end;
     }
 
 }

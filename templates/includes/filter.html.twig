@@ -1,7 +1,12 @@
 {# templates/includes/filter.html.twig #}
 <div class="pane_filter row">
-    <div class="col-md-8">
-        <i class="glyphicon glyphicon-filter"></i>
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4 ">
+        <span class="date_filtered_filter mb-0">
+            {{ start ~' - '~ end}}
+        </span>
     </div>
     <div class="col-md-4">
         <div class="" id="range">
@@ -15,7 +20,7 @@
                 </div>
                 <input name="endDate" id="endDate_{{app.request.locale}}" class="form-control form-control-sm date-picker" placeholder="{{ 'A:'|trans }}" />
                 <div class="input-group-append">
-                    <button type="button" id="filter" class="btn btn-sm   btn-outline-secondary date-pickerBtn" style="" onclick="setDateFilter('{{path('app_date_filter')}}','{{app.request.locale}}')"><center>{{ 'Filtrer'|trans }}</center></button>
+                    <button type="button" id="filter" class="btn btn-sm   btn-outline-secondary date-pickerBtn" style="" onclick="setDateFilter('{{path('app_date_filter')}}', '{{app.request.locale}}')"><center>{{ 'Filtrer'|trans }}</center></button>
                 </div>
                 <div class="input-group-append">
                     &nbsp;<button type="button" id="reset_date_filter" class="btn btn-sm btn-outline-secondary date-pickerBtn" style="" onclick="resetDateFilter('{{path('app_reset_date_filter')}}')"><center>{{ 'Annuler'|trans }}</center></button>

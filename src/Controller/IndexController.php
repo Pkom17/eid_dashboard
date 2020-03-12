@@ -17,20 +17,37 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class IndexController extends AbstractController {
 
+    private function getStartDateForFilter() {
+        $start = $this->get('session')->get("startDate");
+        if (null === $start) {
+            $start = intval((intval(date("Y")) - 1) . date("m"));
+        }
+        return $start;
+    }
+
+    private function getStartDateForTrendsFilter() {
+        $start_for_trends = $this->get('session')->get("startDate");
+        if (null === $start_for_trends) {
+            $start_for_trends = intval(intval(date("Y")) - 1 . '01');
+        }
+        return $start_for_trends;
+    }
+
+    private function getEndDateForFilter() {
+        $end = $this->get('session')->get("endDate");
+        if (null === $end) {
+            $end = intval(date("Ym"));
+        }
+        return $end;
+    }
+
     /**
      * @Route("/", name="app_home")
      */
     public function index(Request $request, TranslatorInterface $translator) {
-        $start = $this->get('session')->get("startDate");
-        $start_for_trends = $start;
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-            $start_for_trends = intval(intval(date("Y")) - 1 . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $start_for_trends = $this->getStartDateForTrendsFilter();
+        $end = $this->getEndDateForFilter();
         return $this->render('home/index.html.twig', [
                     'start' => $translator->trans(Util::MONTHS[substr($start, 4, 2)]) . ' ' . substr($start, 0, 4),
                     'start_for_trends' => $translator->trans(Util::MONTHS[substr($start_for_trends, 4, 2)]) . ' ' . substr($start_for_trends, 0, 4),
@@ -41,8 +58,12 @@ class IndexController extends AbstractController {
     /**
      * @Route("/filter", name="app_filter")
      */
-    public function filter(Request $request) {
+    public function filter(Request $request, TranslatorInterface $translator) {
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         return $this->render('includes/filter.html.twig', [
+                    'start' => $translator->trans(Util::MONTHS[substr($start, 4, 2)]) . ' ' . substr($start, 0, 4),
+                    'end' => $translator->trans(Util::MONTHS[substr($end, 4, 2)]) . ' ' . substr($end, 0, 4),
         ]);
     }
 
@@ -74,14 +95,8 @@ class IndexController extends AbstractController {
 
     public function getTAT() {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $tat1_ = $eidRepo->getTAT1($start, $end);
         $tat2_ = $eidRepo->getTAT2($start, $end);
         $tat3_ = $eidRepo->getTAT3($start, $end);
@@ -120,14 +135,8 @@ class IndexController extends AbstractController {
      */
     public function summaryInfos(Request $request, TranslatorInterface $translator) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $total_tests = $eidRepo->getEIDTestSummary($start, $end);
         $total_patient = $eidRepo->getEIDTotalPatient($start, $end);
         $results = $eidRepo->getEIDPositivity($start, $end);
@@ -321,14 +330,8 @@ class IndexController extends AbstractController {
      */
     public function eidOutcomes(Request $request, TranslatorInterface $translator) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
 
         $details = $this->getOutcomesDetails($start, $end);
         $which_pcr = $this->getParameter('default_pcr'); // PCR 1 only
@@ -376,14 +379,8 @@ class IndexController extends AbstractController {
 
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $which_pcr = $this->getParameter('default_pcr'); // PCR 1 only
         $outcomes = $eidRepo->getEidOutcomes($which_pcr, $start, $end);
 
@@ -468,14 +465,8 @@ class IndexController extends AbstractController {
 
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $which_pcr = $this->getParameter('default_pcr'); // PCR 1 only
         $outcomes = $eidRepo->getEidOutcomesByMotherStatus($which_pcr, $start, $end);
 
@@ -559,14 +550,8 @@ class IndexController extends AbstractController {
 
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $which_pcr = $this->getParameter('default_pcr'); // PCR  only
         $outcomes = $eidRepo->getEidOutcomesByClinicType($which_pcr, $start, $end);
 
@@ -648,14 +633,8 @@ class IndexController extends AbstractController {
 
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $which_pcr = $this->getParameter('default_pcr'); // PCR 1 only
         $outcomes = $eidRepo->getEidOutcomesByMotherRegimen($which_pcr, $start, $end);
 
@@ -739,14 +718,8 @@ class IndexController extends AbstractController {
 
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $which_pcr = $this->getParameter('default_pcr'); // PCR 1 only
         $outcomes = $eidRepo->getEidOutcomesByInfantARV($which_pcr, $start, $end);
 
@@ -830,14 +803,8 @@ class IndexController extends AbstractController {
 
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
-        $start = $this->get('session')->get("startDate");
-        $end = $this->get('session')->get("endDate");
-        if (null === $start) {
-            $start = intval(date("Y") . '01');
-        }
-        if (null === $end) {
-            $end = intval(date("Ym"));
-        }
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
         $which_pcr = $this->getParameter('default_pcr'); // PCR 1 only
         $outcomes = $eidRepo->getEidOutcomesByRegion($which_pcr, $start, $end);
 

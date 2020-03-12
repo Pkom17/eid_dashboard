@@ -3,6 +3,13 @@
 @import '~datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
 html {
     body{
+        .date_filtered_filter{
+            float: right;
+            font-style: italic;
+            color: #595959;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
         .table-sm td {
             padding: 0.1rem;
         }
