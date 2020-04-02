@@ -43,7 +43,7 @@ CREATE PROCEDURE `proc_get_eid_testing_trends` (IN which_pcr INT(1), IN `from_p`
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_trends_month` $$
-CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(1),IN district_id INT(1),IN site_id INT(1),IN age_month_min INT(1),IN age_month_max INT(1),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN age_month_min INT(5),IN age_month_max INT(5),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
   SET @QUERY =  " SELECT
 	YEAR(released_date) as year, 
 	 MONTH(released_date) as month, 
@@ -68,7 +68,7 @@ CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(1),IN district_id
 		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = ",site_id," ");
 	END IF;
     IF(age_month_min != -1 AND age_month_max != -1) THEN 
-		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` between '",age_month_min ,"' and '",age_month_max ,"' ");
+		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` >= '",age_month_min ,"' and `infant_age_month` < '",age_month_max ,"' ");
     END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
     SET @QUERY = CONCAT(@QUERY, " group by year, month order by year asc,month asc");
@@ -77,7 +77,7 @@ CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(1),IN district_id
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_trends_quarter` $$
-CREATE PROCEDURE `proc_get_eid_trends_quarter` (IN region_id INT(1),IN district_id INT(1),IN site_id INT(1), IN age_month_min INT(1),IN age_month_max INT(1),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_trends_quarter` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5), IN age_month_min INT(5),IN age_month_max INT(5),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
   SET @QUERY =  " SELECT
 	YEAR(released_date) as year, 
 	 QUARTER(released_date) as quarter,
@@ -102,7 +102,7 @@ CREATE PROCEDURE `proc_get_eid_trends_quarter` (IN region_id INT(1),IN district_
 		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = ",site_id," ");
 	END IF;
     IF(age_month_min != -1 AND age_month_max != -1) THEN 
-		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` between '",age_month_min ,"' and '",age_month_max ,"' ");
+		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` >= '",age_month_min ,"' and `infant_age_month` < '",age_month_max ,"' ");
     END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
     SET @QUERY = CONCAT(@QUERY, " group by year, quarter order by year asc,quarter asc");
@@ -111,7 +111,7 @@ CREATE PROCEDURE `proc_get_eid_trends_quarter` (IN region_id INT(1),IN district_
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_trends_year` $$
-CREATE PROCEDURE `proc_get_eid_trends_year` (IN region_id INT(1),IN district_id INT(1),IN site_id INT(1), IN age_month_min INT(1),IN age_month_max INT(1),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_trends_year` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5), IN age_month_min INT(5),IN age_month_max INT(5),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
   SET @QUERY =  " SELECT
 	YEAR(released_date) as year, 
     sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
@@ -135,7 +135,7 @@ CREATE PROCEDURE `proc_get_eid_trends_year` (IN region_id INT(1),IN district_id 
 		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = ",site_id," ");
 	END IF;
     IF(age_month_min != -1 AND age_month_max != -1) THEN 
-		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` between '",age_month_min ,"' and '",age_month_max ,"' ");
+		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` >= '",age_month_min ,"' and `infant_age_month` < '",age_month_max ,"' ");
     END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
     SET @QUERY = CONCAT(@QUERY, " group by year order by year asc");
@@ -285,17 +285,24 @@ CREATE PROCEDURE `proc_get_eid_outcomes_plateforme` (IN `from_p` INT(8), IN `to_
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_labs_age` $$
-CREATE PROCEDURE `proc_get_eid_labs_age` (IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_labs_age` (IN which_pcr INT(1),IN lab INT(5),IN age_month_min INT(5),IN age_month_max INT(5), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
   SET @QUERY =  " SELECT
 	p.name plateforme,	
 	infant_age_month as age_month,
-	count(*) total,
+    sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
+	sum(pcr_result='Négatif') as negatif,
 	sum(pcr_result='Positif') as positif
     FROM `eid_test` et join `plateforme` p on et.plateforme_id = p.id
     WHERE 1 ";
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
+	IF(lab != 0) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `plateforme_id` = '",lab,"' ");
+	END IF;
+    IF(age_month_min != -1 AND age_month_max != -1) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` >= '",age_month_min ,"' and `infant_age_month` < '",age_month_max ,"' ");
+    END IF;
 	IF(which_pcr = -1) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
@@ -304,7 +311,5 @@ CREATE PROCEDURE `proc_get_eid_labs_age` (IN which_pcr INT(1), IN `from_p` INT(8
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
-
-
 
 DELIMITER ;

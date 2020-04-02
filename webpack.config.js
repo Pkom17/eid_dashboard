@@ -29,6 +29,7 @@ Encore
         .addEntry('home', './assets/js/home.js')
         .addEntry('trends', './assets/js/trends.js')
         .addEntry('labs', './assets/js/labs.js')
+        .addEntry('orgs', './assets/js/orgs.js')
         .addEntry('org_filter', './assets/js/org_filter.js')
 //        .addEntry('custom', './assets/js/custom.js')
 //        .addEntry('shim', './assets/js/shim.js')

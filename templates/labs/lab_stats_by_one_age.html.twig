@@ -1,0 +1,60 @@
+{# templates/labs/stats.html.twig #}
+
+<div id="eid_plateforme_stats_by_one_age_cat">
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var trends = new Highcharts.Chart({
+            chart: {
+                renderTo: "eid_plateforme_stats_by_one_age_cat",
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            exporting: {
+                enable: true
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b> {point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: "{{label}}",
+                    colorByPoint: true,
+                    data:{{ series |raw}}
+                }],
+            title: {
+                text: "{{label}}"
+            },
+            legend: {
+                enabled: true,
+                align: 'right',
+                verticalAlign: 'middle',
+                layout: 'vertical'},
+            tooltip: {
+                // pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                formatter: function () {
+                    var s = '<b>' + this.point.name + '</b>';
+                    s += '<br/>' + this.series.name + ':  <b>' + Highcharts.numberFormat(Math.abs(this.point.y), 0, ",", " ") + '</b> (' + Highcharts.numberFormat(this.point.percentage, 1, ",", " ") + '%)';
+                    return s;
+                }
+            }
+        });
+    });
+</script>

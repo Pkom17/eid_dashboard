@@ -15,3 +15,6 @@ insert into plateforme(id,site_id,name,lab_desc,lab_location) values(14,NULL,'CH
 insert into plateforme(id,site_id,name,lab_desc,lab_location) values(15,NULL,'CHR SAN PEDRO','','SAN-PEDRO');
 insert into plateforme(id,site_id,name,lab_desc,lab_location) values(16,NULL,'CIRBA','','ABIDJAN');
 insert into plateforme(id,site_id,name,lab_desc,lab_location) values(17,NULL,'CHR GAGNOA','','GAGNOA');
+
+alter table plateforme add column eid_active boolean default true;
+update plateforme set eid_active = 0 where id in (2,5,11,13,16);

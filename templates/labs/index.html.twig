@@ -27,12 +27,40 @@
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-1">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Statistiques EID par tranche d\'âge'|trans|upper }}</h6>
-                    <span class="date_filtered">
-                        {{ start ~' - '~ end}}
-                    </span>
+                    <div class="row"> 
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Statistiques EID par tranche d\'âge'|trans|upper }}</h6>
+                            <span class="date_filtered">
+                                {{ start ~' - '~ end}}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-5 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Plateformes'|trans }} </span>
+                                </div>
+                                <select name="plateforme" id="select_plateforme" class="form-control form-control-sm">
+                                    <option value="0" selected="selected">{{'Tout'|trans  }}</option>
+                                    {% for plateforme in plateformes %}
+                                        <option value="{{ plateforme['id'] }}">{{ plateforme['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Classe d\'âge'|raw|trans }} </span>
+                                </div>
+                                <select name="pcr" id="select_age" class="form-control form-control-sm">
+                                    <option value="0" selected="selected">{{'Tout'|trans  }}</option>
+                                    {% for age in ages %}
+                                        <option value="{{ age['id'] }}">{{ age['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="card_labs_stat_ages">
                     {{ render(controller('App\\Controller\\LabsController::labsStatAge')) }}
                 </div>
             </div>
@@ -40,12 +68,29 @@
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-1">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Délai d\'exécution'|trans|upper }}</h6>
-                    <span class="date_filtered">
-                        {{ start ~' - '~ end}}
-                    </span>
+                    <div class="row"> 
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Délai d\'exécution'|trans|upper }}</h6>
+                            <span class="date_filtered">
+                                {{ start ~' - '~ end}}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-5 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Plateformes'|trans }} </span>
+                                </div>
+                                <select name="plateforme" id="select_plateforme_tat" class="form-control form-control-sm">
+                                    <option value="0" selected="selected">{{'Tout'|trans  }}</option>
+                                    {% for plateforme in plateformes %}
+                                        <option value="{{ plateforme['id'] }}">{{ plateforme['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="card_labs_tat">
                     {{ render(controller('App\\Controller\\LabsController::labsTAT')) }}
                 </div>
             </div>

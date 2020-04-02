@@ -46,7 +46,7 @@ class EIDAgeCategoryRepository extends ServiceEntityRepository {
     public function getAgeCategoryLimit($id) {
         $result = false;
         $conn = $this->getEntityManager()->getConnection();
-        $query = " select age_min,age_max from eid_age_category where id = :id";
+        $query = " select name,age_min,age_max from eid_age_category where id = :id";
         $prep = $conn->prepare($query);
         $exec = $prep->execute([
             'id' => $id,
@@ -56,6 +56,7 @@ class EIDAgeCategoryRepository extends ServiceEntityRepository {
         }
         if ($result === false) {
             $result = [
+            'name' => "",
             'age_min' => -1,
             'age_max' => -1,
             ];

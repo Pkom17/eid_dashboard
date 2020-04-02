@@ -1,4 +1,11 @@
 
+ $('#org_region').val(0);
+ $('#org_district').val(0);
+  $('#org_site').val(0);
+$('#select_age_year').val(0);
+ $('#select_age_quarter').val(0);
+ $('#select_age_month').val(0);
+
 $("#select_pcr_year").on("change", function () {
     var pcr = $(this).val();
     var age = $('#select_age_year').val();
@@ -14,9 +21,9 @@ $("#select_pcr_year").on("change", function () {
     if (!site_id) {
         site_id = 0;
     }
-    var height = $('#select_pcr_year').css("height");
+    var height = $('#card_trends_year').css("height");
     $.post('tests_trends_year/' + region_id + '/' + district_id + '/' + site_id + '/' + age + '/' + pcr, null, function (data) {
-        $('#select_pcr_year').css({
+        $('#card_trends_year').css({
             height: height
         });
         $('#card_trends_year').html(data);
@@ -37,9 +44,9 @@ $("#select_pcr_quarter").on("change", function () {
     if (!site_id) {
         site_id = 0;
     }
-    var height = $('#select_pcr_quarter').css("height");
+    var height = $('#card_trends_quarter').css("height");
     $.post('tests_trends_quarter/' + region_id + '/' + district_id + '/' + site_id + '/' + age + '/' + pcr, null, function (data) {
-        $('#select_pcr_quarter').css({
+        $('#card_trends_quarter').css({
             height: height
         });
         $('#card_trends_quarter').html(data);
