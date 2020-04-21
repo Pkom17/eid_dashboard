@@ -69,7 +69,7 @@
                         formatter: function () {
                         var s = '<b>' + this.x + '</b>',
                                 sum = 0;
-                                var limits = [[{{limits[0][0]~','~limits[0][1]~'],['~limits[1][0]~','~limits[1][1]~'],['~limits[2][0]~','~limits[2][1]}}]];
+                                var limits = [[{{limits[2][0]~','~limits[2][1]~'],['~limits[1][0]~','~limits[1][1]~'],['~limits[0][0]~','~limits[0][1]}}]];
                                 $.each(this.points, function (i, point) {
                                 s += '<br/> <span style="color: ' + point.series.color + '">\u25A0</span> ' + point.series.name + ': ' +
                                         '<b>' + Math.abs(point.y) + '  {{'Jours'|trans}} (Min:' + limits[i][0] + ', Max:' + limits[i][1] + ')</b>';

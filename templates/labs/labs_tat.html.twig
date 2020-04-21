@@ -27,7 +27,7 @@
             tooltip: {
             formatter: function () {
     {% for key,value in limits %}   
-            limits["{{key}}"] = [[{{value['limits'][0][0]~','~value['limits'][0][1]~'],['~value['limits'][1][0]~','~value['limits'][1][1]~'],['~value['limits'][2][0]~','~value['limits'][2][1]}}]];
+            limits["{{key}}"] = [[{{value['limits'][2][0]~','~value['limits'][2][1]~'],['~value['limits'][1][0]~','~value['limits'][1][1]~'],['~value['limits'][0][0]~','~value['limits'][0][1]}}]];
     {% endfor %}
                 var s = '<b>' + this.x + '</b>',
                         sum = 0;

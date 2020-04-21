@@ -277,6 +277,10 @@
                 <source>Positivity</source>
                 <target>Positivity</target>
             </trans-unit>
+            <trans-unit id="menu_vl_dashboard" resname="Tableau de bord CV">
+                <source>Tableau de bord CV</source>
+                <target>VL Dashboard</target>
+            </trans-unit>
             
         </body>
     </file>
