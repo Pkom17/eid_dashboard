@@ -1,0 +1,20 @@
+{# templates/includes/district_filter.html.twig #}
+<div class="row">
+    <div class="col-md-10">
+        <div class="row">
+            <input type="hidden" id="org_level" value="0"/>
+            <div class="col-md-5 mb-4">
+                <label for="org_district">
+                    {{ 'Districts:'|trans }}
+                </label>
+                <select name="org_district" id="org_district" class="form-control form-control-sm">
+                    <option></option>
+                    <option value="0">{{ 'Tous les districts'|trans }} </option>
+                    {% for district in districts %}
+                        <option value="{{ district['id'] }}"> {{ district['name'] }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

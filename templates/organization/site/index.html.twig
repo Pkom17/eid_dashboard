@@ -1,0 +1,72 @@
+{# templates/organization/index.html.twig #}
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts_2 %}
+    <script>
+        resetDistricts = function () {
+            var options = '<option></option>';
+            options += '<option value="0"> {{ 'Tous les districts'|trans }} </option>';
+            $('#org_district').html(options);
+            $('#org_district').select2({
+                placeholder: '{{'Choisir un district'|trans}}'
+            });
+        };
+        resetSites = function () {
+            var options = '<option></option>';
+            options += '<option value="0"> {{ 'Tous les sites'|trans }} </option>';
+            $('#org_site').html(options);
+            $('#org_site').select2({
+                placeholder: '{{'Choisir un site'|trans}}'
+            });
+        };
+
+        $(document).ready(function () {
+            $('#org_site').select2({
+                placeholder: '{{'Choisir un site'|trans}}'
+            });
+
+            $('#org_site').on("change", function () {
+                var site_id = $(this).val();
+
+            });
+
+        });
+    </script>
+    {{ encore_entry_script_tags('orgs') }}
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    {{ render(controller('App\\Controller\\IndexController::siteFilter')) }}
+    <div class="row sum_lane_1">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID par site'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body" >
+                    {{ render(controller('App\\Controller\\SiteController::eidOutcomesBySites')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_2">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Statistiques EID par site'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\SiteController::sitesStat')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}  

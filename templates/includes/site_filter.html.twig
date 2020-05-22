@@ -1,0 +1,20 @@
+{# templates/includes/site_filter.html.twig #}
+<div class="row">
+    <div class="col-md-10">
+        <div class="row">
+            <input type="hidden" id="org_level" value="0"/>
+            <div class="col-md-6 mb-4">
+                <label for="org_site">
+                    {{ 'Sites:'|trans }}
+                </label>
+                <select name="org_site" id="org_site" class="form-control form-control-sm">
+                    <option></option>
+                    <option value="0"> {{ 'Tous les sites'|trans }} </option>
+                    {% for site in sites %}
+                        <option value="{{ site['id'] }}"> {{ site['name'] }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

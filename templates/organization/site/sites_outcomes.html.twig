@@ -1,0 +1,91 @@
+
+<div id="eid_outcomes_site">
+
+</div>
+<script>
+    $(function () {
+    var trends = new Highcharts.Chart({
+    chart: {
+    renderTo: "eid_outcomes_site"
+    },
+            exporting: {
+            enable: true
+            },
+            credits: {
+            enabled: false
+            },
+            plotOptions: {
+            column: {
+            stacking: "normal",
+                    dataLabels: {
+                    enabled: false
+                    }
+            }, spline: {
+            lineWidth: 0,
+                    marker: {
+                    fillColor: '#00ff99',
+                            lineWidth: 2,
+                            lineColor: '#3498eb',
+                            symbol: "circle"
+                    },
+                    states: {
+                    hover: {
+                    enabled: false
+                    }
+                    }
+            }
+            },
+            series:{{ series |raw}},
+            title: {
+            text: null
+            },
+            tooltip: {
+            shared: true,
+                    borderColor: "#999",
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    shadow: false,
+                    yDecimals: 0,
+                    valueDecimale: 0,
+                    useHTML: true,
+                    headerFormat: '<table class="tip"><thead><tr><th>{point.key}</th></tr><thead><tbody>',
+                    pointFormat: '<tr><th style="color:{series.color}">{series.name}:</th><td style="text-align:right">{point.y}</td></tr>',
+                    footerFormat: '<tr><th>Total:</th><td style="text-align:right"><b>{point.total}</b></td></tr></tbody></table>'
+            },
+            xAxis: {
+            categories:{{ categories |raw}},
+            },
+            yAxis: [
+            {
+            labels: {
+            formatter: function() {
+            return this.value + '%';
+            },
+                    style: {
+                    }
+            },
+                    title: {
+                    text: '{{'Percentage'|trans}}',
+                            style: {
+                            color: '#3498eb'
+                            }
+                    },
+                    opposite: true
+            },
+            {
+            title: {
+            text: "Tests"
+            },
+                    stackLabels: {
+                    rotation: 0,
+                            enabled: true,
+                            style: {
+                            fontWeight: 'bold',
+                                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            },
+                            y: - 10
+                    }
+            }]
+    });
+    });
+</script>

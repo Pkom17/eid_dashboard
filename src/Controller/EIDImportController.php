@@ -93,9 +93,7 @@ class EIDImportController extends AbstractController {
         $this->loadDictionaryInfo();
         $this->loadSitesInfo();
         $this->loadLabsInfo();
-//        $i = 0;
         foreach ($data as $row_data) {
-//            $i++;
             if (trim($row_data['LABNO']) === '' || trim($row_data['SUJETNO']) === '') {
                 $this->badRows++;
                 continue;
@@ -141,6 +139,7 @@ class EIDImportController extends AbstractController {
     }
 
     private function insertOrUpdateEIDTestFromEntryData($row_data) {
+               // $start = microtime(true);
         $eid_test = $this->getDoctrine()->getRepository(EIDTest::class)->findOneBy(["labno" => $row_data['LABNO']]);
         if (is_null($eid_test)) {
             $eid_test = $this->createEIDTestFromEntryData($row_data);
@@ -152,7 +151,7 @@ class EIDImportController extends AbstractController {
         $eid_test->setReceivedDate(\DateTime::createFromFormat('d/m/Y H:i', $row_data['DRCPT']));
         $eid_test->setCompletedDate(\DateTime::createFromFormat('d/m/Y H:i', $row_data['COMPLETED_DATE']));
         $eid_test->setReleasedDate($releasedDate);
-        $eid_test->setDispatchedDate(null);
+        $eid_test->setDispatchedDate($releasedDate);
         $eid_test->setInfantAgeMonth($row_data['AGEMOIS']);
         $eid_test->setInfantAgeWeek($row_data['AGESEMS']);
         $eid_test->setInfantGender(EIDDictionary::resolveGender($row_data['SEXE']));
@@ -172,7 +171,10 @@ class EIDImportController extends AbstractController {
         $eid_test->setPlateforme($plateforme_id);
         $eid_test->setPatient($this->getPatientFromEntryData($row_data));
         $this->em->persist($eid_test);
-        unset($eid_test);
+//                echo 'Temps mis: ' . (microtime(true) - $start) . ' ms';
+//        die();
+        //$this->getDoctrine()->getRepository(EIDTest::class)->updateEIDTest($eid_test);
+        //unset($eid_test);
     }
 
     private function createEIDTestFromEntryData($row_data) {
@@ -185,7 +187,7 @@ class EIDImportController extends AbstractController {
         $eid_test->setReceivedDate(\DateTime::createFromFormat('d/m/Y H:i', $row_data['DRCPT']));
         $eid_test->setCompletedDate(\DateTime::createFromFormat('d/m/Y H:i', $row_data['COMPLETED_DATE']));
         $eid_test->setReleasedDate($releasedDate);
-        $eid_test->setDispatchedDate(null);
+        $eid_test->setDispatchedDate($releasedDate);
         $eid_test->setInfantAgeMonth($row_data['AGEMOIS']);
         $eid_test->setInfantAgeWeek($row_data['AGESEMS']);
         $eid_test->setInfantGender(EIDDictionary::resolveGender($row_data['SEXE']));

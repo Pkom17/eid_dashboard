@@ -1,0 +1,20 @@
+{# templates/includes/partner_filter.html.twig #}
+<div class="row">
+    <div class="col-md-10">
+        <div class="row">
+            <input type="hidden" id="org_level" value="0"/>
+            <div class="col-md-4 mb-4">
+                <label for="select_partner">
+                    {{ 'Partenaires:'|trans }}
+                </label>
+                <select name="select_partner" id="select_partner" class="form-control form-control-sm">
+                    <option></option>
+                    <option value="0"> {{ 'Tous les partenaires'|trans }} </option>
+                    {% for partner in partners %}
+                        <option value="{{ partner['id'] }}"> {{ partner['name'] }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

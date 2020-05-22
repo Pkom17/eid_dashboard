@@ -1,0 +1,37 @@
+{# templates/organization/region//index.html.twig #}
+{% extends 'base.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+{% block javascripts_2 %}
+    <script>
+        $(document).ready(function () {
+            $('#org_region').select2({
+                placeholder: '{{'Choisir une région'|trans}}'
+            });
+
+            $('#org_region').on("change", function () {
+                var region_id = $(this).val();
+                if (region_id == 0) {
+                    $.post('{{url('app_org_region')}}' + '/overview', null, function (data) {
+                        $('.pane-default').html(data);
+                    });
+                } else {
+                    $.post('{{url('app_org_region')}}' + '/region_details/' + region_id, null, function (data) {
+                        $('.pane-default').html(data);
+                        refreshDataTable();
+                    });
+                }
+            });
+        });
+    </script>
+    {{ encore_entry_script_tags('orgs') }}
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    {{ render(controller('App\\Controller\\IndexController::regionFilter')) }}
+    <div class="pane-default">
+        {{ render(controller('App\\Controller\\RegionController::regionsOverview')) }}
+    </div>
+
+{% endblock %}  

@@ -13,6 +13,7 @@ parameters:
     neg_color: '#36bd53'
     inv_color: '#000000'
     card_height: '350px'
+    graph_column_limit: 50
     default_pcr: 0
 
 services:

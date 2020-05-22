@@ -1,5 +1,8 @@
-$('#lab_stats_fr').dataTable({
-    responsive: true, //<B>lTfgtip
+
+$('#select_partner').val(0);
+
+$('#partner_stats_fr').dataTable({
+   // responsive: true, //<B>lTfgtip
     dom: "<'row '" +
             "<'col-md-2'l>" +
             "<'col-md-6'B>" +
@@ -55,7 +58,7 @@ $('#lab_stats_fr').dataTable({
     }
 });
 
-$('#lab_stats_en').dataTable({
+$('#partner_stats_en').dataTable({
     responsive: true, //<B>lTfgtip
     dom: "<'row '" +
             "<'col-md-2'l>" +
@@ -112,40 +115,4 @@ $('#lab_stats_en').dataTable({
     }
 });
 
-$('#select_age').val(0);
-$('#select_plateforme').val(0);
-$('#select_plateforme_tat').val(0);
 
-$("#select_age").on("change", function () {
-    var pcr = 0;
-    var age = $('#select_age').val();
-    var plateforme_id = $('#select_plateforme').val();
-    if (!plateforme_id) {
-        plateforme_id = 0;
-    }
-    var height = $('#card_labs_stat_ages').css("height");
-    $.post('labs/labs_stat_age/' + plateforme_id + '/' + age + '/' + pcr, null, function (data) {
-        $('#card_labs_stat_ages').css({
-            height: height
-        });
-        $('#card_labs_stat_ages').html(data);
-    });
-});
-
-$('#select_plateforme').on("change", function () {
-    $("#select_age").change();
-});
-
-$("#select_plateforme_tat").on("change", function () {
-    var plateforme_id = $('#select_plateforme_tat').val();
-    if (!plateforme_id) {
-        plateforme_id = 0;
-    }
-    var height = $('#card_labs_stat_ages').css("height");
-    $.post('labs/labs_tat/' + plateforme_id, null, function (data) {
-        $('#card_labs_tat').css({
-            height: height
-        });
-        $('#card_labs_tat').html(data);
-    });
-});

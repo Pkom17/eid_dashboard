@@ -216,8 +216,8 @@
             <trans-unit id="lab_a" resname="A:">
                 <source>A:</source>
                 <target>A:</target>
-            </trans-unit>
-            <trans-unit id="lab_rang_pcr" resname="Rang PCR">
+            </trans-unit> 
+           <trans-unit id="lab_rang_pcr" resname="Rang PCR">
                 <source>Rang PCR</source>
                 <target>Rang PCR</target>
             </trans-unit>

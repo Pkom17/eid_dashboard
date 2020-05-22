@@ -44,7 +44,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/", name="app_home")
      */
-    public function index(Request $request, TranslatorInterface $translator) {
+    public function index( TranslatorInterface $translator) {
         $start = $this->getStartDateForFilter();
         $start_for_trends = $this->getStartDateForTrendsFilter();
         $end = $this->getEndDateForFilter();
@@ -58,7 +58,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/filter", name="app_filter")
      */
-    public function filter(Request $request, TranslatorInterface $translator) {
+    public function filter(TranslatorInterface $translator) {
         $start = $this->getStartDateForFilter();
         $end = $this->getEndDateForFilter();
         return $this->render('includes/filter.html.twig', [
@@ -68,19 +68,57 @@ class IndexController extends AbstractController {
     }
 
     /**
-     * @Route("/org_filter", name="app_filter")
+     * @Route("/orgs_filter", name="app_orgs_filter")
      */
-    public function orgFilter(Request $request) {
+    public function orgFilter() {
         $regions = $this->getDoctrine()->getRepository(\App\Entity\Region::class)->findRegions();
-        return $this->render('includes/org_filter.html.twig', [
+        return $this->render('includes/orgs_filter.html.twig', [
                     'regions' => $regions,
+        ]);
+    }
+    /**
+     * @Route("/region_filter", name="app_filter_region")
+     */
+    public function regionFilter() {
+        $regions = $this->getDoctrine()->getRepository(\App\Entity\Region::class)->findRegions();
+        return $this->render('includes/region_filter.html.twig', [
+                    'regions' => $regions,
+        ]);
+    }
+
+    /**
+     * @Route("/district_filter", name="app_filter_district")
+     */
+    public function districtFilter() {
+        $districts = $this->getDoctrine()->getRepository(\App\Entity\District::class)->findDistricts();
+        return $this->render('includes/district_filter.html.twig', [
+                    'districts' => $districts,
+        ]);
+    }
+
+    /**
+     * @Route("/site_filter", name="app_filter_site")
+     */
+    public function siteFilter() {
+        $sites = $this->getDoctrine()->getRepository(\App\Entity\Site::class)->findSites();
+        return $this->render('includes/site_filter.html.twig', [
+                    'sites' => $sites,
+        ]);
+    }
+    /**
+     * @Route("/partner_filter", name="app_filter_partner")
+     */
+    public function partnerFilter() {
+        $partners = $this->getDoctrine()->getRepository(\App\Entity\Partner::class)->findPartners();
+        return $this->render('includes/partner_filter.html.twig', [
+                    'partners' => $partners,
         ]);
     }
 
     /**
      * @Route("/get_districts/{region}", name="app_get_districts_by_region",requirements={"region"="-?\d+"})
      */
-    public function getDistrictsByRegion(Request $request, $region) {
+    public function getDistrictsByRegion($region) {
         $districts = $this->getDoctrine()->getRepository(\App\Entity\District::class)->findDistrictsByRegion($region);
         return new \Symfony\Component\HttpFoundation\JsonResponse($districts);
     }
@@ -88,7 +126,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/get_sites/{district}", name="app_get_sites_by_district",requirements={"district"="-?\d+"})
      */
-    public function getSitesByDistrict(Request $request, $district) {
+    public function getSitesByDistrict($district) {
         $sites = $this->getDoctrine()->getRepository(\App\Entity\Site::class)->findSitesByDistrict($district);
         return new \Symfony\Component\HttpFoundation\JsonResponse($sites);
     }
@@ -133,7 +171,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/summary_infos", name="app_summary_infos")
      */
-    public function summaryInfos(Request $request, TranslatorInterface $translator) {
+    public function summaryInfos(TranslatorInterface $translator) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
         $start = $this->getStartDateForFilter();
         $end = $this->getEndDateForFilter();
@@ -180,7 +218,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/date_filter", name="app_date_filter")
      */
-    public function dateFilter(Request $request, TranslatorInterface $translator) {
+    public function dateFilter(Request $request) {
         $locale = strtoupper($request->getLocale());
         $start = $request->request->get('startDate');
         $end = $request->request->get('endDate');
@@ -194,9 +232,7 @@ class IndexController extends AbstractController {
         if (is_array($endDate_parts) && count($endDate_parts) == 2) {
             $endDate = $endDate_parts[1] . array_search(Util::MONTHS_KEYS[$locale][trim($endDate_parts[0])], Util::MONTHS);
         }
-        //$this->get('session')->set('filterStartDate', $start);
         $this->get('session')->set('startDate', $startDate);
-        //$this->get('session')->set('filterEndDate', $end);
         $this->get('session')->set('endDate', $endDate);
         return new \Symfony\Component\HttpFoundation\JsonResponse(['stat' => 1]);
     }
@@ -204,7 +240,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/reset_date_filter", name="app_reset_date_filter")
      */
-    public function resetDateFilter(Request $request) {
+    public function resetDateFilter() {
         $this->get('session')->remove('startDate');
         $this->get('session')->remove('endDate');
         return new \Symfony\Component\HttpFoundation\JsonResponse(['stat' => 1]);
@@ -213,7 +249,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/tests_trends/{which_pcr}", name="home_tests_trends",requirements={"which_pcr"="-?\d+"})
      */
-    public function testTrends(Request $request, TranslatorInterface $translator, int $which_pcr = 0) {
+    public function testTrends(TranslatorInterface $translator, int $which_pcr = 0) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
         $start = $this->get('session')->get("startDate");
         $end = $this->get('session')->get("endDate");
@@ -328,7 +364,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/eid_outcomes", name="home_eid_outcomes")
      */
-    public function eidOutcomes(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomes(TranslatorInterface $translator) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
         $start = $this->getStartDateForFilter();
         $end = $this->getEndDateForFilter();
@@ -363,7 +399,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/eid_outcomes_age", name="home_eid_outcomes_age")
      */
-    public function eidOutcomesAge(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomesAge( TranslatorInterface $translator) {
         $agesCategories = $this->getDoctrine()->getRepository(\App\Entity\EIDAgeCategory::class)->getAgesCategories();
         $ages = [];
         $categories = [];
@@ -451,7 +487,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/eid_outcomes_mother_status", name="home_eid_outcomes_mother_status")
      */
-    public function eidOutcomesMotherStatus(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomesMotherStatus(TranslatorInterface $translator) {
         $agesCategories = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherHIVStatus();
         $status = [];
         $categories = [];
@@ -536,7 +572,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/eid_outcomes_clinic", name="home_eid_outcomes_clinic")
      */
-    public function eidOutcomesByClinicType(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomesByClinicType(TranslatorInterface $translator) {
         $typeOfClinics = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getTypeOfClinic();
         $types = [];
         $categories = [];
@@ -619,7 +655,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/eid_outcomes_mother_regimen", name="home_eid_outcomes_mother_regimen")
      */
-    public function eidOutcomesByMotherRegimen(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomesByMotherRegimen(TranslatorInterface $translator) {
         $typeOfClinics = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherRegimen();
         $types = [];
         $categories = [];
@@ -704,7 +740,7 @@ class IndexController extends AbstractController {
     /**
      * @Route("/eid_outcomes_infant_arv", name="home_eid_outcomes_infant_arv")
      */
-    public function eidOutcomesByInfantARV(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomesByInfantARV(TranslatorInterface $translator) {
         $typeOfClinics = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getInfantARV();
         $types = [];
         $categories = [];
@@ -787,20 +823,18 @@ class IndexController extends AbstractController {
     }
 
     /**
-     * @Route("/eid_outcomes_infant_arv", name="home_eid_outcomes_infant_arv")
+     * @Route("/eid_outcomes_region", name="home_eid_outcomes_region")
      */
-    public function eidOutcomesByRegion(Request $request, TranslatorInterface $translator) {
+    public function eidOutcomesByRegion(TranslatorInterface $translator) {
         $regions = $this->getDoctrine()->getRepository(\App\Entity\Region::class)->findRegions();
         $types = [];
-        $categories = [];
+        //   $categories = [];
+        $categories2 = [];
         $k = 0;
         foreach ($regions as $value) {
             $types[$k] = $value['name'];
-            $categories[$k] = $value['name'];
             $k++;
         }
-        $categories[] = $translator->trans('Aucune donnée');
-
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
 
         $start = $this->getStartDateForFilter();
@@ -828,47 +862,29 @@ class IndexController extends AbstractController {
         $d[3]['color'] = $this->getParameter('pos_color2');
         $d[3]['tooltip']['valueSuffix'] = " %";
         $u = 0;
-        foreach ($types as $type) {
-            $d[0]['data'][$u] = 0;
-            $d[1]['data'][$u] = 0;
-            $d[2]['data'][$u] = 0;
-            $d[3]['data'][$u] = 0;
-            foreach ($outcomes as $entry) {
-                if ($entry['region'] == $type) {
-                    $d[0]['data'][$u] += intval($entry['positif']);
-                    $d[1]['data'][$u] += intval($entry['negatif']);
-                    $d[2]['data'][$u] += intval($entry['invalide']);
-                }
-            }
-            $total = $d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u];
-            if ($total == 0) {
-                $d[3]['data'][$u] += 0;
-            } else {
-                $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($total)) * 100, 2));
-            }
-            $u++;
-        }
-
-//for rows that not contains right age values -- others
         $d[0]['data'][$u] = 0;
         $d[1]['data'][$u] = 0;
         $d[2]['data'][$u] = 0;
         $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
-            if (is_null($entry['region'])) {
-                $d[0]['data'][$u] += intval($entry['positif']);
-                $d[1]['data'][$u] += intval($entry['negatif']);
-                $d[2]['data'][$u] += intval($entry['invalide']);
+            if (is_null($entry['region']) || $entry['region'] == 'null' || $entry['region'] == '') {
+                $categories2[$u] = $translator->trans('Aucune donnée');
+            } else {
+                $categories2[$u] = $entry['region'];
             }
-        }
-        if ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u] == 0) {
-            $d[3]['data'][$u] += 0;
-        } else {
-            $d[3]['data'][$u] += floatval(number_format(($d[0]['data'][$u] / ($d[0]['data'][$u] + $d[1]['data'][$u] + $d[2]['data'][$u])) * 100, 2));
+            $d[0]['data'][$u] = intval($entry['positif']);
+            $d[1]['data'][$u] = intval($entry['negatif']);
+            $d[2]['data'][$u] = intval($entry['invalide']);
+            if (intval($entry['total']) == 0) {
+                $d[3]['data'][$u] = 0;
+            } else {
+                $d[3]['data'][$u] = floatval(number_format(($d[0]['data'][$u] / (intval($entry['total']))) * 100, 2));
+            }
+            $u++;
         }
         return $this->render('home/test_outcomes_region.html.twig', [
                     'series' => json_encode($d),
-                    'categories' => json_encode($categories),
+                    'categories' => json_encode($categories2),
         ]);
     }
 

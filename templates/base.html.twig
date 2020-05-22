@@ -18,7 +18,7 @@
         <div class="container-fluid" id="wrapper">
             {% block menu %}
                 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-                    <img src="{{ url('homepage')~asset('build/images/logo_moh.jpg') }}" alt="brand" title="logo MOH" height="52" class="" style="padding:0;"/>
+                    <img src="{{ url('homepage')~'build/images/logo_moh.jpg' }}" alt="brand" title="logo MOH" height="52" class="" style="padding:0;"/>
                     <a class="navbar-brand" href="#">{{ 'Tableau de bord EID'|trans  }}</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -34,16 +34,19 @@
                             <li class="nav-item">
                                 <a class="nav-link {%if app.request.get('_route') == 'app_labs' %} active {%endif%}" href="{{ path('app_labs') }}">{{ 'Labos'|trans  }}</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link {%if app.request.get('_route') == 'app_organization' %} active {%endif%}" href="{{ path('app_organization') }}">{{ 'Organisations'|trans  }}</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {%if app.request.get('_route') in ['app_organization','app_org_region','app_org_district','app_org_site'] %} active {%endif%}" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ 'Organisations'|trans  }}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{{ path('app_org_region') }}">{{ 'Regions'|trans  }}</a>
+                                    <a class="dropdown-item" href="{{ path('app_org_district') }}">{{ 'Districts'|trans  }}</a>
+                                    <a class="dropdown-item" href="{{ path('app_org_site') }}">{{ 'Etablissements'|trans  }}</a>
+                                </div>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {%if app.request.get('_route') == 'app_partner' %} active {%endif%}" href="{{ path('app_partner') }}">{{ 'Partenaires'|trans  }}</a>
                             </li>
-                            <!--                            <li class="nav-item">
-                                                            <a class="nav-link {%if app.request.get('_route') == 'app_positivity' %} active {%endif%}" href="{{ path('app_positivity') }}">{{ 'Positivité'|trans  }}</a>
-                                                        </li>
-                            -->
                             <li class="nav-item">
                                 <a class="nav-link {%if app.request.get('_route') == 'app_eid_import_new' %} active {%endif%}" href="{{ path('app_eid_import_new') }}">{{ 'Charger des données'|trans  }}</a>
                             </li>

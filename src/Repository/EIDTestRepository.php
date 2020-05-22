@@ -47,6 +47,75 @@ class EIDTestRepository extends ServiceEntityRepository {
       }
      */
 
+    public function addEIDTest(?EIDTest $eidTest) {
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "insert into eid_test (infant_gender, which_pcr, second_pcr_test_reason, rejected_reason, pcr_result, patient_id, site_id, district_id, region_id, partner_id, labno, collected_date, received_date, completed_date, released_date, dispatched_date, infant_age_month, infant_age_week, date_updated, plateforme_id, yearmonth)"
+                . " values(:infant_gender,:which_pcr,:second_pcr_test_reason,:rejected_reason,:pcr_result,:patient_id,:site_id,:district_id,:region_id,:partner_id,:labno,:collected_date,"
+                . " :received_date,:completed_date,:released_date,:dispatched_date,:infant_age_month,:infant_age_week,:date_updated,:plateforme_id,:yearmonth)";
+        $prep = $conn->prepare($query);
+        $prep->execute(
+                [
+                    'infant_gender' => $eidTest->getInfantGender(),
+                    'which_pcr' => $eidTest->getWhichPCR(),
+                    'second_pcr_test_reason' => $eidTest->getSecondPCRTestReason(),
+                    'rejected_reason' => $eidTest->getRejectedReason(),
+                    'pcr_result' => $eidTest->getPcrResult(),
+                    'patient_id' => $eidTest->getPatient()->getId(),
+                    'site_id' => $eidTest->getSite(),
+                    'district_id' => $eidTest->getDistrict(),
+                    'region_id' => $eidTest->getRegion(),
+                    'partner_id' => $eidTest->getPartner(),
+                    'labno' => $eidTest->getLabno(),
+                    'collected_date' => $eidTest->getCollectedDate()->format('Y-m-d H:i'),
+                    'received_date' => $eidTest->getReceivedDate()->format('Y-m-d H:i'),
+                    'completed_date' => $eidTest->getCompletedDate()->format('Y-m-d H:i'),
+                    'released_date' => $eidTest->getReceivedDate()->format('Y-m-d H:i'),
+                    'dispatched_date' => $eidTest->getDispatchedDate()->format('Y-m-d H:i'),
+                    'infant_age_month' => $eidTest->getInfantAgeMonth(),
+                    'infant_age_week' => $eidTest->getInfantAgeWeek(),
+                    'date_updated' => $eidTest->getDateUpdated()->format('Y-m-d H:i'),
+                    'plateforme_id' => $eidTest->getPlateforme(),
+                    'yearmonth' => $eidTest->getYearmonth(),
+        ]);
+        $conn->close();
+    }
+
+    public function updateEIDTest(?EIDTest $eidTest) {
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "update eid_test set infant_gender =:infant_gender, which_pcr =:which_pcr, second_pcr_test_reason=:second_pcr_test_reason,  rejected_reason=:rejected_reason,"
+                . " pcr_result=:pcr_result,  patient_id=:patient_id, site_id=:site_id, district_id=:district_id, region_id = :region_id, partner_id=:partner_id, "
+                . "labno=:labno, collected_date=:collected_date, received_date=:received_date, completed_date=:completed_date, released_date=:released_date,"
+                . " dispatched_date=:dispatched_date, infant_age_month=:infant_age_month,infant_age_week=:infant_age_week, date_updated=:date_updated, "
+                . "plateforme_id=:plateforme_id, yearmonth=:yearmonth where id = :id";
+        $prep = $conn->prepare($query);
+        $prep->execute(
+                [
+                    'infant_gender' => $eidTest->getInfantGender(),
+                    'which_pcr' => $eidTest->getWhichPCR(),
+                    'second_pcr_test_reason' => $eidTest->getSecondPCRTestReason(),
+                    'rejected_reason' => $eidTest->getRejectedReason(),
+                    'pcr_result' => $eidTest->getPcrResult(),
+                    'patient_id' => $eidTest->getPatient()->getId(),
+                    'site_id' => $eidTest->getSite(),
+                    'district_id' => $eidTest->getDistrict(),
+                    'region_id' => $eidTest->getRegion(),
+                    'partner_id' => $eidTest->getPartner(),
+                    'labno' => $eidTest->getLabno(),
+                    'collected_date' => $eidTest->getCollectedDate()->format('Y-m-d H:i'),
+                    'received_date' => $eidTest->getReceivedDate()->format('Y-m-d H:i'),
+                    'completed_date' => $eidTest->getCompletedDate()->format('Y-m-d H:i'),
+                    'released_date' => $eidTest->getReceivedDate()->format('Y-m-d H:i'),
+                    'dispatched_date' => $eidTest->getDispatchedDate()->format('Y-m-d H:i'),
+                    'infant_age_month' => $eidTest->getInfantAgeMonth(),
+                    'infant_age_week' => $eidTest->getInfantAgeWeek(),
+                    'date_updated' => $eidTest->getDateUpdated()->format('Y-m-d H:i'),
+                    'plateforme_id' => $eidTest->getPlateforme(),
+                    'yearmonth' => $eidTest->getYearmonth(),
+                    'id'=>$eidTest->getId(),
+        ]);
+        $conn->close();
+    }
+
     public function getEidOutcomes($which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -64,6 +133,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getEidOutcomesDetails($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -80,8 +150,6 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
-    
-    
 
     public function getEidOutcomesByClinicType($which_pcr, $from, $to) {
         $results = [];
@@ -191,7 +259,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         return $results;
     }
 
-        public function getEIDTrendsByYear($region_id,$district_id,$site_id, $age_month_min, $age_month_max,$which_pcr, $from, $to) {
+    public function getEIDTrendsByYear($region_id, $district_id, $site_id, $age_month_min, $age_month_max, $which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
         $query = "CALL proc_get_eid_trends_year (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
@@ -213,7 +281,8 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
-        public function getEIDTrendsByQuarter($region_id,$district_id,$site_id, $age_month_min, $age_month_max,$which_pcr, $from, $to) {
+
+    public function getEIDTrendsByQuarter($region_id, $district_id, $site_id, $age_month_min, $age_month_max, $which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
         $query = "CALL proc_get_eid_trends_quarter (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
@@ -235,7 +304,8 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
-        public function getEIDTrendsByMonth($region_id,$district_id,$site_id, $age_month_min, $age_month_max,$which_pcr, $from, $to) {
+
+    public function getEIDTrendsByMonth($region_id, $district_id, $site_id, $age_month_min, $age_month_max, $which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
         $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
@@ -257,7 +327,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
-    
+
     public function getEIDTestSummary($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -278,6 +348,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getEIDTotalPatient($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -294,6 +365,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getEIDPositivity($from, $to) { //based on PCR 1
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -309,8 +381,8 @@ class EIDTestRepository extends ServiceEntityRepository {
         }
         $conn->close();
         return $results;
-    }    
-    
+    }
+
     public function getTAT1($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -327,6 +399,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getTAT2($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -343,6 +416,7 @@ class EIDTestRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getTAT3($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();

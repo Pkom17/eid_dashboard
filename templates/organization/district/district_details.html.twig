@@ -1,0 +1,75 @@
+{# templates/organization/region/region_details.html.twig#}
+
+<div class="row sum_lane_1">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances des tests'|trans|upper ~ ' ~ ' ~ district.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\DistrictController::testsTrendsDistricts',{'district_id':district_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_2">
+    <div class="col-md-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du district'|trans|upper  ~ ' ~ ' ~ district.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\DistrictController::districtOutcomes',{'district_id':district_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du district par age'|trans|upper  ~ ' ~ ' ~ district.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                      {{ render(controller('App\\Controller\\DistrictController::districtOutcomesByAge',{'district_id':district_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_3">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Statistiques des tests par site'|trans|upper  ~ ' ~ ' ~ district.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                 {{ render(controller('App\\Controller\\SiteController::sitesStat',{'district_id':district_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_4">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Repartition des resultats par site'|trans|upper  ~ ' ~ ' ~ district.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                 {{ render(controller('App\\Controller\\DistrictController::districtOutcomesBySite',{'district_id':district_id})) }}
+            </div>
+        </div>
+    </div>
+</div>                   

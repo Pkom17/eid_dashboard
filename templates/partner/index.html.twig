@@ -1,8 +1,55 @@
-{# templates/partner/index.html.twig #}
+{# templates/organization/index.html.twig #}
 {% extends 'base.html.twig' %}
-{% block body %}
-    
-{% endblock %}
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
+{% block javascripts_2 %}
+    <script>
+
+        $(document).ready(function () {
+            $('#select_partner').select2({
+                placeholder: '{{'Choisir un partenaire'|trans}}'
+            });
+            $('#select_partner').on("change", function () {
+                var partner_id = $(this).val();
+
+            });
+
+        });
+    </script>
+    {{ encore_entry_script_tags('partner') }}
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    {{ render(controller('App\\Controller\\IndexController::partnerFilter')) }}
+    <div class="row sum_lane_1">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID par partenaire'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body" >
+                    {{ render(controller('App\\Controller\\PartnerController::eidOutcomesByPartners')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_2">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <h6 class="m-0 font-weight-bold text-primary">{{ 'Statistiques EID par partenaire'|trans|upper }}</h6>
+                    <span class="date_filtered">
+                        {{ start ~' - '~ end}}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {{ render(controller('App\\Controller\\PartnerController::partnersStat')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}  
