@@ -379,7 +379,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_district` (IN `region` INT(5), IN `from_
 		SET @QUERY = CONCAT(@QUERY, " AND `et`.`region_id` = '",region,"' ");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by district order by total desc");
+    SET @QUERY = CONCAT(@QUERY, " group by district,region order by total desc");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
@@ -412,7 +412,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_site` (IN `district` INT(5),IN `from_p` 
 		SET @QUERY = CONCAT(@QUERY, " AND `et`.`district_id` = '",district,"' ");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by site order by total desc");
+    SET @QUERY = CONCAT(@QUERY, " group by site,district,region order by total desc");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
