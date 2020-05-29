@@ -72,31 +72,20 @@ class SiteRepository extends ServiceEntityRepository {
     }
 
     public function getEidOutcomesBySite($from, $to, $district = 0) {
-        $results = [];
-        $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_outcomes_site (:district,:from,:to) ";
-        $prep = $conn->prepare($query);
-        $exec = $prep->execute(
-                [
-                    'district' => $district,
-                    'from' => $from,
-                    'to' => $to
-        ]);
-        if ($exec) {
-            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
-        }
-        $conn->close();
-        return $results;
+        return $this->getEidSitesStats($from, $to, $district);
     }
 
     public function getEidSitesStats($from, $to, $district = 0) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_outcomes_site(:district,:from,:to) ";
+        $query = "CALL proc_get_eid_outcomes_site(:region_id,:district_id,:site_id,:partner_id,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
-                    'district' => $district,
+                    'region_id' => 0,
+                    'district_id' => $district,
+                    'site_id' => 0, // no site
+                    'partner_id' => 0, 
                     'from' => $from,
                     'to' => $to
         ]);
@@ -110,13 +99,14 @@ class SiteRepository extends ServiceEntityRepository {
     public function getTestsTrendsSite($site_id, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:partner_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
                     'region_id' => 0,
                     'district_id' => 0,
                     'site_id' => $site_id, // no site
+                    'partner_id' => 0, 
                     'age_month_min' => -1, // no age
                     'age_month_max' => -1, //no age
                     'which_pcr' => 0,
@@ -152,6 +142,48 @@ class SiteRepository extends ServiceEntityRepository {
         return $results;
     }
 
+    public function getSiteOutcomesPCR($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_outcomes_which_pcr(:region_id,:district_id,:site_id,:partner_id,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getSiteOutcomesByPCR2Reason($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_outcomes_pcr2_reason(:region_id,:district_id,:site_id,:partner_id,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
     public function getSiteOutcomesDetails($site_id, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -160,6 +192,205 @@ class SiteRepository extends ServiceEntityRepository {
         $exec = $prep->execute(
                 [
                     'site_id' => $site_id,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getSiteOutcomesAge($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_org_outcomes_age(:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    
+    public function getEidOutcomesByClinicType($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_outcomes_type_clinic (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getEidOutcomesByMotherRegimen($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_outcomes_mother_regimen (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getEidOutcomesByInfantARV($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_outcomes_infant_arv (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getEidOutcomesByMotherStatus($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_outcomes_hiv_status (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+  
+    public function getAgeStatsByClinicType($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_org_outcomes_age_clinic_type(:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getAgeStatsByMotherHIVStatus($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_org_outcomes_age_mother_hiv_status(:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getAgeStatsByMotherRegimen($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_org_outcomes_age_mother_regimen(:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
+    public function getAgeStatsByInfantARV($site_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_org_outcomes_age_infant_arv(:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => $site_id,
+                    'partner_id' => 0,
+                    'which_pcr' => 0,
                     'from' => $from,
                     'to' => $to
         ]);

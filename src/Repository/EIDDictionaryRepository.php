@@ -75,6 +75,21 @@ class EIDDictionaryRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+    public function getPCR2Reasons() {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "select id,entry_name from eid_dictionary where domain_code = :d";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'd' => EIDDictionary::REASON_FOR_SECOND_PCR,
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
 
     public function getMotherRegimen() {
         $results = [];
@@ -111,7 +126,7 @@ class EIDDictionaryRepository extends ServiceEntityRepository {
     public function getMotherHIVStatus() {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "select id,entry_name as name from eid_dictionary where domain_code = :d";
+        $query = "select id,entry_name from eid_dictionary where domain_code = :d";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [

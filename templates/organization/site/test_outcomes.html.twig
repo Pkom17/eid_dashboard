@@ -1,0 +1,164 @@
+<div class="row" style="padding:0;margin:0;">
+    <div class="col-md-6" id="eid_outcomes" style="height:280px;padding:0;margin:0;">
+
+    </div>
+    <div class="col-md-6" id="eid_outcomes_pcr_type" style="height:280px;padding:0;margin:0;">
+
+    </div>
+</div>
+<div class="table-responsive table-responsive-sm">
+    <table class="table table-sm table-striped table-bordered" style="font-size: 0.9em">
+
+        {% set total_pos =  details[0]['positif'] +  details[1]['positif']+  details[2]['positif']%}
+        {% set total_neg =  details[0]['negatif'] +  details[1]['negatif']+  details[2]['negatif']%}
+        {% set total =  total_pos+total_neg%}
+        {% set total_pcr1 =  details[1]['negatif'] + details[1]['positif']%}
+        {% set total_pcr2 =  details[2]['negatif'] + details[2]['positif']%}
+        {% set total_und =  details[0]['negatif'] + details[0]['positif']%}
+        <tr>
+            <th>{{ 'Tests done'|trans }}</th> 
+            <th>{{ 'Positive'|trans }}</th> 
+            <th>{{ 'Negative'|trans }}</th> 
+            <th>{{ 'Total'|trans }}</th> 
+        </tr>
+        <tr>
+            <td>{{ 'Non défini'|trans }}</td>
+            <td>{{ details[0]['positif']}}</td>
+            <td>{{ details[0]['negatif'] }}</td>
+            {% if total != 0 %}
+                <td>{{ total_und ~' ('~(total_und*100/total)|number_format(1)~'%)'}}</td>
+            {% else %}
+                <td>{{ 0 ~' ('~0|number_format(1)~'%)'}}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>{{ '1er PCR'|trans }}</td>
+            <td>{{ details[1]['positif'] }}</td>
+            <td>{{ details[1]['negatif'] }}</td>
+            {% if total != 0 %}
+                <td>{{ total_pcr1~' ('~(total_pcr1*100/total)|number_format(1) ~'%)'}}</td>
+            {% else %}
+                <td>{{ 0 ~' ('~0|number_format(1)~'%)'}}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>{{ '2eme PCR'|trans }}</td>
+            <td>{{ details[2]['positif'] }}</td>
+            <td>{{ details[2]['negatif'] }}</td>
+            {% if total != 0 %}
+                <td>{{ total_pcr2~' ('~(total_pcr2*100/total)|number_format(1)~'%)' }}</td>
+            {% else %}
+                <td>{{ 0 ~' ('~0|number_format(1)~'%)'}}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>{{ 'Total'|trans }}</th> 
+                {% if total != 0 %}
+                <th>{{  total_pos ~' ('~(total_pos*100/total)|number_format(1) ~'%)' }}</th> 
+                <th>{{  total_neg  ~' ('~(total_neg*100/total)|number_format(1)~'%)' }}</th> 
+                {% else %}
+                <td>{{ 0 ~' ('~0|number_format(1)~'%)'}}</td>
+                <td>{{ 0 ~' ('~0|number_format(1)~'%)'}}</td>
+            {% endif %}
+            <th>{{  total  }}</th> 
+        </tr>
+    </table>
+</div>
+<script>
+    $(function () {
+        var chart1 = new Highcharts.Chart({
+            chart: {
+                renderTo: "eid_outcomes",
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: true,
+                align: 'left',
+                verticalAlign: 'bottom',
+                layout: 'horizontal'},
+            tooltip: {
+                formatter: function () {
+                    var s = '<b>' + this.point.name + '</b>';
+                    s += '<br/>' + this.series.name + ':  <b>' + Highcharts.numberFormat(Math.abs(this.point.y), 0, ",", " ") + '</b> (' + Highcharts.numberFormat(this.point.percentage, 1, ",", " ") + '%)';
+                    return s;
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b> {point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: '{{'Tests done'|trans}}',
+                    colorByPoint: true,
+                    data:{{series_1|raw}}
+                }]
+
+        });
+        var chart2 = new Highcharts.Chart({
+            chart: {
+                renderTo: "eid_outcomes_pcr_type",
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            legend: {
+                enabled: true,
+                align: 'right',
+                verticalAlign: 'bottom',
+                layout: 'horizontal'},
+            tooltip: {
+                formatter: function () {
+                    var s = '<b>' + this.point.name + '</b>';
+                    s += '<br/>' + this.series.name + ':  <b>' + Highcharts.numberFormat(Math.abs(this.point.y), 0, ",", " ") + '</b> (' + Highcharts.numberFormat(this.point.percentage, 1, ",", " ") + '%)';
+                    return s;
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b> {point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                    name: '{{'Tests done'|trans}}',
+                    colorByPoint: true,
+                    data:{{series_2|raw}}
+                }]
+
+        });
+    });
+</script>

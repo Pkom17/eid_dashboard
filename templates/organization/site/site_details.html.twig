@@ -1,0 +1,144 @@
+{# templates/organization/region/region_details.html.twig#}
+
+<div class="row sum_lane_1">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances des tests et positivités'|trans|upper ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\SiteController::testsTrendsSites',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_3">
+    <div class="col-md-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du site'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\SiteController::siteOutcomes',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du site par raison du 2e PCR'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\SiteController::siteOutcomesByPCR2Reason',{'site_id':site_id})) }} 
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du site par age'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\SiteController::siteOutcomesByAge',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_4">
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par Statut VIH de la mère'|trans|upper ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\SiteController::eidOutcomesMotherStatus',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par service de provenance'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\SiteController::eidOutcomesByClinicType',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par regime de la mère au cours de la PTME'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\SiteController::eidOutcomesByMotherRegimen',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par prophylaxie ARV de l\'enfant'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\SiteController::eidOutcomesByInfantARV',{'site_id':site_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_5">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Repartition détaillée par age'|trans|upper  ~ ' ~ ' ~ site.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div id="age_details" class="card-body" >
+                <ul>
+                    <li><a href="#clinic">{{ 'Service de provenance'|trans }}</a></li>
+                    <li><a href="#hiv_status">{{ 'Statut VIH de la mère'|trans }}</a></li>
+                    <li><a href="#mother_regimen">{{ 'Régime de la mère au cours de la PTME'|trans }}</a></li>
+                    <li><a href="#infant_arv">{{ 'Prophylaxie ARV de l\'enfant'|trans }}</a></li>
+                </ul>
+                <div id="clinic">
+                {{ render(controller('App\\Controller\\SiteController::siteStatsByAge',{'type':1,'site_id':site_id})) }}
+                </div>
+                <div id="hiv_status">
+                {{ render(controller('App\\Controller\\SiteController::siteStatsByAge',{'type':2,'site_id':site_id})) }}
+                </div>
+                <div id="mother_regimen">
+                {{ render(controller('App\\Controller\\SiteController::siteStatsByAge',{'type':3,'site_id':site_id})) }}
+                </div>
+                <div id="infant_arv">
+                {{ render(controller('App\\Controller\\SiteController::siteStatsByAge',{'type':4,'site_id':site_id})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>                   

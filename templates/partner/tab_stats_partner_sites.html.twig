@@ -1,6 +1,6 @@
-{# templates/organization/site/stats.html.twig #}
-<div class="" id="eid_site_stats">
-        <table id="site_stats_{{app.request.locale}}" class="table table-responsive-md table-striped table-bordered dt-responsive"  style="width:100%">
+{# templates/labs/stats.html.twig #}
+<div class="" id="eid_partner_stats">
+        <table id="partner_stats_{{app.request.locale}}" class="table table-responsive-md table-striped table-bordered dt-responsive"  style="width:100%">
             <thead>
                 <tr>
                     <th rowspan="2">{{ 'N°'|trans }}</th>
@@ -14,8 +14,11 @@
                     <th colspan="2" style="text-align: center">{{ '2 - 6 mois'|trans }}</th>
                     <th colspan="2" style="text-align: center">{{ '6 - 12 mois'|trans }}</th>
                     <th colspan="2" style="text-align: center">{{ '12 - 18 mois'|trans }}</th>
+                    <th colspan="2" style="text-align: center">{{ 'Plus de 18 mois'|trans }}</th>
                 </tr>
                 <tr>
+                    <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
+                    <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
                     <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
                     <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
                     <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
@@ -45,6 +48,8 @@
                         <td>{{ stat['moins_12_positif'] }}</td>
                         <td>{{ stat['moins_18'] }}</td>
                         <td>{{ stat['moins_18_positif'] }}</td>
+                        <td>{{ stat['plus_18'] }}</td>
+                        <td>{{ stat['plus_18_positif'] }}</td>
                     </tr>
                     {% set n = n+1 %}
                 {% endfor %}

@@ -111,7 +111,7 @@ class EIDTestRepository extends ServiceEntityRepository {
                     'date_updated' => $eidTest->getDateUpdated()->format('Y-m-d H:i'),
                     'plateforme_id' => $eidTest->getPlateforme(),
                     'yearmonth' => $eidTest->getYearmonth(),
-                    'id'=>$eidTest->getId(),
+                    'id' => $eidTest->getId(),
         ]);
         $conn->close();
     }
@@ -154,10 +154,14 @@ class EIDTestRepository extends ServiceEntityRepository {
     public function getEidOutcomesByClinicType($which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_outcomes_type_clinic (:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_outcomes_type_clinic (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => 0,
+                    'partner_id' => 0,
                     'which_pcr' => $which_pcr,
                     'from' => $from,
                     'to' => $to
@@ -172,10 +176,14 @@ class EIDTestRepository extends ServiceEntityRepository {
     public function getEidOutcomesByMotherRegimen($which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_outcomes_mother_regimen (:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_outcomes_mother_regimen (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => 0,
+                    'partner_id' => 0,
                     'which_pcr' => $which_pcr,
                     'from' => $from,
                     'to' => $to
@@ -190,10 +198,14 @@ class EIDTestRepository extends ServiceEntityRepository {
     public function getEidOutcomesByInfantARV($which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_outcomes_infant_arv (:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_outcomes_infant_arv (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => 0,
+                    'partner_id' => 0,
                     'which_pcr' => $which_pcr,
                     'from' => $from,
                     'to' => $to
@@ -208,10 +220,14 @@ class EIDTestRepository extends ServiceEntityRepository {
     public function getEidOutcomesByMotherStatus($which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_outcomes_hiv_status (:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_outcomes_hiv_status (:region_id,:district_id,:site_id,:partner_id,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
+                    'region_id' => 0,
+                    'district_id' => 0,
+                    'site_id' => 0,
+                    'partner_id' => 0,
                     'which_pcr' => $which_pcr,
                     'from' => $from,
                     'to' => $to
@@ -308,13 +324,14 @@ class EIDTestRepository extends ServiceEntityRepository {
     public function getEIDTrendsByMonth($region_id, $district_id, $site_id, $age_month_min, $age_month_max, $which_pcr, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:partner_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
                     'region_id' => $region_id,
                     'district_id' => $district_id,
                     'site_id' => $site_id,
+                    'partner_id' => 0,
                     'age_month_min' => $age_month_min,
                     'age_month_max' => $age_month_max,
                     'which_pcr' => $which_pcr,

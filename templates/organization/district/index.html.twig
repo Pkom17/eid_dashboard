@@ -5,16 +5,8 @@
 {% endblock %}
 {% block javascripts_2 %}
     <script>
-        resetDistricts = function () {
-            var options = '<option></option>';
-            options += '<option value="0"> {{ 'Tous les districts'|trans }} </option>';
-            $('#org_district').html(options);
-            $('#org_district').select2({
-                placeholder: '{{'Choisir un district'|trans}}'
-            });
-        };
-
         $(document).ready(function () {
+            $('#org_district').val(0);
             $('#org_district').select2({
                 placeholder: '{{'Choisir un district'|trans}}'
             });

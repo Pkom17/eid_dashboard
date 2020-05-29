@@ -79,4 +79,64 @@ class OrganizationController extends AbstractController {
         return $end;
     }
 
+    protected function getAgeInfos(?TranslatorInterface $translator) {
+        $agesCategories = $this->getDoctrine()->getRepository(\App\Entity\EIDAgeCategory::class)->getAgesCategories();
+        $ages = [];
+        $categories = [];
+        $k = 0;
+        foreach ($agesCategories as $value) {
+            $ages[$k]['name'] = $value['name'];
+            $categories[] = $translator->trans($value['name']);
+            $ages[$k]['limits'][0] = $value['age_min'];
+            $ages[$k]['limits'][1] = $value['age_max'];
+            $k++;
+        }
+        $categories[] = $translator->trans('Autres');
+        return ['age_categories' => $categories, 'ages' => $ages];
+    }
+
+    protected function getTypeOfClinicInfos() {
+        $typeOfClinics = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getTypeOfClinic();
+        $types = [];
+        $k = 0;
+        foreach ($typeOfClinics as $value) {
+            $types[$k] = $value['entry_name'];
+            $k++;
+        }
+        return $types;
+    }
+
+    protected function getMotherHIVStatusInfos() {
+        $mothersStatus = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherHIVStatus();
+        $status = [];
+        $k = 0;
+        foreach ($mothersStatus as $value) {
+            $status[$k] = $value['entry_name'];
+            $k++;
+        }
+        return $status;
+    }
+
+    protected function getMotherRegimentInfos() {
+        $motherRegimens = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherRegimen();
+        $regimens = [];
+        $k = 0;
+        foreach ($motherRegimens as $value) {
+            $regimens[$k] = $value['entry_name'];
+            $k++;
+        }
+        return $regimens;
+    }
+    protected function getInfantARVInfos() {
+        $infantARVs = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getInfantARV();
+        $types = [];
+        $categories = [];
+        $k = 0;
+        foreach ($infantARVs as $value) {
+            $types[$k] = $value['entry_name'];
+            $k++;
+        }
+        return $types;
+    }
+
 }

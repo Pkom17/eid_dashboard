@@ -1,0 +1,85 @@
+{# templates/labs/stats.html.twig #}
+<div class="" id="eid_site_stats">
+    <table id="site_stats_{{app.request.locale}}" class="table table-responsive-md table-striped table-bordered dt-responsive"  style="width:100%">
+        <thead>
+            <tr>
+                <th rowspan="2">{{ 'N°'|trans }}</th>
+                <th rowspan="2">{{ type }}</th>
+                <th rowspan="2">{{ 'Total'|trans }}</th>
+                <th rowspan="2">{{ 'Positif'|trans }}</th>
+                <th rowspan="2">{{ 'Invalide'|trans }}</th>
+                <th colspan="2" style="text-align: center">{{ 'Moins de 2 mois'|trans }}</th>
+                <th colspan="2" style="text-align: center">{{ '2 - 6 mois'|trans }}</th>
+                <th colspan="2" style="text-align: center">{{ '6 - 12 mois'|trans }}</th>
+                <th colspan="2" style="text-align: center">{{ '12 - 18 mois'|trans }}</th>
+                <th colspan="2" style="text-align: center">{{ 'Plus de 18 mois'|trans }}</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Total'|trans }}</th>
+                <th style="text-align: center;font-size:0.8em">{{ 'Positif'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set n,ttot,tpos,tinv,l2tot,l2pos,l6tot,l6pos,l12tot,l12pos,l18tot,l18pos,m18tot,m18pos = 1,0,0,0,0,0,0,0,0,0,0,0,0,0 %}
+            {% for stat in stats %}
+                <tr>
+                    <td>{{ n }}</td>
+                    <td>{{ stat['name'] }}</td>
+                    <td style="text-align: center">{{ stat['total'] }}</td>
+                    <td style="text-align: center">{{ stat['positif'] }}</td>
+                    <td style="text-align: center">{{ stat['invalide'] }}</td>
+                    <td style="text-align: center">{{ stat[0]['total'] }}</td>
+                    <td style="text-align: center">{{ stat[0]['positif'] }}</td>
+                    <td style="text-align: center">{{ stat[1]['total'] }}</td>
+                    <td style="text-align: center">{{ stat[1]['positif'] }}</td>
+                    <td style="text-align: center">{{ stat[2]['total'] }}</td>
+                    <td style="text-align: center">{{ stat[2]['positif'] }}</td>
+                    <td style="text-align: center">{{ stat[3]['total'] }}</td>
+                    <td style="text-align: center">{{ stat[3]['positif'] }}</td>
+                    <td style="text-align: center">{{ stat[4]['total'] }}</td>
+                    <td style="text-align: center">{{ stat[4]['positif'] }}</td>
+                </tr>
+                {% set n = n+1 %}
+                {% set ttot = ttot+stat['total'] %}
+                {% set tpos = tpos+stat['positif'] %}
+                {% set tinv = tinv+stat['invalide'] %}
+                {% set l2tot = l2tot+stat[0]['total'] %}
+                {% set l2pos = l2pos+stat[0]['positif'] %}
+                {% set l6tot = l6tot+stat[1]['total'] %}
+                {% set l6pos = l6pos+stat[1]['positif'] %}
+                {% set l12tot = l12tot+stat[2]['total'] %}
+                {% set l12pos = l12pos+stat[2]['positif'] %}
+                {% set l18tot = l18tot+stat[3]['total'] %}
+                {% set l18pos = l18pos+stat[3]['positif'] %}
+                {% set m18tot = m18tot+stat[4]['total'] %}
+                {% set m18pos = m18pos+stat[4]['positif'] %}
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th style="text-align: center" colspan="2">{{ 'Total'|trans }}</th>
+                <th style="text-align: center">{{ ttot }}</th>
+                <th style="text-align: center">{{ tpos }}</th>
+                <th style="text-align: center">{{ tinv }}</th>
+                <th style="text-align: center">{{ l2tot }}</th>
+                <th style="text-align: center">{{ l2pos }}</th>
+                <th style="text-align: center">{{ l6tot }}</th>
+                <th  style="text-align: center">{{ l6pos }}</th>
+                <th style="text-align: center">{{ l12tot }}</th>
+                <th  style="text-align: center">{{ l12pos }}</th>
+                <th  style="text-align: center">{{ l18tot }}</th>
+                <th  style="text-align: center">{{ l18pos }}</th>
+                <th style="text-align: center">{{ m18tot }}</th>
+                <th  style="text-align: center">{{ m18pos }}</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>

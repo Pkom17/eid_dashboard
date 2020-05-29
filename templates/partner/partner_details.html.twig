@@ -1,0 +1,143 @@
+{# templates/partner/partner_details.html.twig#}
+
+<div class="row sum_lane_1">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Tendances des tests et positivités'|trans|upper ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\PartnerController::testsTrendsPartners',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_3">
+    <div class="col-md-5">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du site'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\PartnerController::partnerOutcomes',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du site par raison du 2e PCR'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\PartnerController::partnerOutcomesByPCR2Reason',{'partner_id':partner_id})) }} 
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID du site par age'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\PartnerController::partnerOutcomesByAge',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_4">
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par Statut VIH de la mère'|trans|upper ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body">
+                {{ render(controller('App\\Controller\\PartnerController::eidOutcomesMotherStatus',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par service de provenance'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\PartnerController::eidOutcomesByClinicType',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par regime de la mère au cours de la PTME'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\PartnerController::eidOutcomesByMotherRegimen',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultats EID par prophylaxie ARV de l\'enfant'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\PartnerController::eidOutcomesByInfantARV',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row sum_lane_6">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Repartition des resultats par site'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\PartnerController::partnerOutcomesBySite',{'partner_id':partner_id})) }} 
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="row sum_lane_5">
+    <div class="col-xl-12 col-lg-12 col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-1">
+                <h6 class="m-0 font-weight-bold text-primary">{{ 'Statistiques des tests par site'|trans|upper  ~ ' ~ ' ~ partner.name}}</h6>
+                <span class="date_filtered">
+                    {{ start ~' - '~ end}}
+                </span>
+            </div>
+            <div class="card-body" >
+                {{ render(controller('App\\Controller\\PartnerController::partnerStatsBySite',{'partner_id':partner_id})) }}
+            </div>
+        </div>
+    </div>
+</div>
+

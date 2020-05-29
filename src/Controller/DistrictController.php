@@ -410,6 +410,9 @@ class DistrictController extends OrganizationController {
         ]);
     }
 
+    /**
+     * @Route("/organization/district/stats_site/{district_id?0}", name="app_org_district_stats_site",requirements={"district_id"="\d+"})
+     */
     public function districtStatsBySite(int $district_id = 0) {
         $start = $this->getStartDateForFilter();
         $end = $this->getEndDateForFilter();
@@ -419,16 +422,11 @@ class DistrictController extends OrganizationController {
         ]);
     }
 
+    /**
+     * @Route("/organization/district/outcomes_site/{district_id?0}", name="app_org_district_outcomes_site",requirements={"district_id"="\d+"})
+     */
     public function districtOutcomesBySite(TranslatorInterface $translator, int $district_id) {
-        $districts = $this->getDoctrine()->getRepository(\App\Entity\Site::class)->findSitesByDistrict($district_id);
-        $types = [];
-        //   $categories = [];
-        $categories2 = [];
-        $k = 0;
-        foreach ($districts as $value) {
-            $types[$k] = $value['name'];
-            $k++;
-        }
+        $categories = [];
         $start = $this->getStartDateForFilter();
         $end = $this->getEndDateForFilter();
         $outcomes = $this->getDoctrine()->getRepository(\App\Entity\Site::class)->getEidOutcomesBySite($start, $end, $district_id);
@@ -459,9 +457,9 @@ class DistrictController extends OrganizationController {
         $d[3]['data'][$u] = 0;
         foreach ($outcomes as $entry) {
             if (is_null($entry['site']) || $entry['site'] == 'null' || $entry['site'] == '') {
-                $categories2[$u] = $translator->trans('Aucune donnée');
+                $categories[$u] = $translator->trans('Aucune donnée');
             } else {
-                $categories2[$u] = $entry['site'];
+                $categories[$u] = $entry['site'];
             }
             $d[0]['data'][$u] = intval($entry['positif']);
             $d[1]['data'][$u] = intval($entry['negatif']);
@@ -475,7 +473,7 @@ class DistrictController extends OrganizationController {
         }
         return $this->render('organization/district/district_outcomes_site.html.twig', [
                     'series' => json_encode($d),
-                    'categories' => json_encode($categories2),
+                    'categories' => json_encode($categories),
         ]);
     }
 

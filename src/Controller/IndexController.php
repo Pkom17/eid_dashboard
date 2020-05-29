@@ -488,13 +488,13 @@ class IndexController extends AbstractController {
      * @Route("/eid_outcomes_mother_status", name="home_eid_outcomes_mother_status")
      */
     public function eidOutcomesMotherStatus(TranslatorInterface $translator) {
-        $agesCategories = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherHIVStatus();
+        $mothersStatus = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherHIVStatus();
         $status = [];
         $categories = [];
         $k = 0;
-        foreach ($agesCategories as $value) {
-            $status[$k]['name'] = $value['name'];
-            $categories[] = $translator->trans($value['name']);
+        foreach ($mothersStatus as $value) {
+            $status[$k] = $value['entry_name'];
+            $categories[] = $translator->trans($value['entry_name']);
             $k++;
         }
         $categories[] = $translator->trans('Aucune donnée');
@@ -532,7 +532,7 @@ class IndexController extends AbstractController {
             $d[2]['data'][$u] = 0;
             $d[3]['data'][$u] = 0;
             foreach ($outcomes as $entry) {
-                if ($entry['hiv_status'] == $stat['name']) {
+                if ($entry['hiv_status'] == $stat) {
                     $d[0]['data'][$u] += intval($entry['positif']);
                     $d[1]['data'][$u] += intval($entry['negatif']);
                     $d[2]['data'][$u] += intval($entry['invalide']);
@@ -656,11 +656,11 @@ class IndexController extends AbstractController {
      * @Route("/eid_outcomes_mother_regimen", name="home_eid_outcomes_mother_regimen")
      */
     public function eidOutcomesByMotherRegimen(TranslatorInterface $translator) {
-        $typeOfClinics = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherRegimen();
+        $motherRegimens = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getMotherRegimen();
         $types = [];
         $categories = [];
         $k = 0;
-        foreach ($typeOfClinics as $value) {
+        foreach ($motherRegimens as $value) {
             $types[$k] = $value['entry_name'];
             $categories[$k] = $translator->trans($value['entry_name']);
             $k++;
@@ -741,11 +741,11 @@ class IndexController extends AbstractController {
      * @Route("/eid_outcomes_infant_arv", name="home_eid_outcomes_infant_arv")
      */
     public function eidOutcomesByInfantARV(TranslatorInterface $translator) {
-        $typeOfClinics = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getInfantARV();
+        $infantARVs = $this->getDoctrine()->getRepository(\App\Entity\EIDDictionary::class)->getInfantARV();
         $types = [];
         $categories = [];
         $k = 0;
-        foreach ($typeOfClinics as $value) {
+        foreach ($infantARVs as $value) {
             $types[$k] = $value['entry_name'];
             $categories[$k] = $translator->trans($value['entry_name']);
             $k++;

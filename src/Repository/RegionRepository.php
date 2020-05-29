@@ -78,13 +78,14 @@ class RegionRepository extends ServiceEntityRepository {
     public function getTestsTrendsRegion($region_id, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
-        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $query = "CALL proc_get_eid_trends_month (:region_id,:district_id,:site_id,:partner_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
         $prep = $conn->prepare($query);
         $exec = $prep->execute(
                 [
                     'region_id' => $region_id,
                     'district_id' => 0, // no distric
                     'site_id' => 0, // no site
+                    'partner_id' => 0, // no site
                     'age_month_min' => -1, // no age
                     'age_month_max' => -1, //no age
                     'which_pcr' => 0,

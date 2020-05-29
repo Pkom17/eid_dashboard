@@ -46,7 +46,7 @@ CREATE PROCEDURE `proc_get_eid_testing_trends` (IN which_pcr INT(1), IN `from_p`
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_trends_month` $$
-CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN age_month_min INT(5),IN age_month_max INT(5),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5),IN age_month_min INT(5),IN age_month_max INT(5),IN which_pcr INT(1), IN from_p INT(8), IN to_p INT(8))  BEGIN
   SET @QUERY =  " SELECT
 	YEAR(released_date) as year, 
 	 MONTH(released_date) as month, 
@@ -69,6 +69,9 @@ CREATE PROCEDURE `proc_get_eid_trends_month` (IN region_id INT(5),IN district_id
 	END IF;
 	IF(site_id != 0) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = ",site_id," ");
+	END IF;
+	IF(partner_id != 0) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = ",partner_id," ");
 	END IF;
     IF(age_month_min != -1 AND age_month_max != -1) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `infant_age_month` >= '",age_month_min ,"' and `infant_age_month` < '",age_month_max ,"' ");
@@ -147,7 +150,7 @@ CREATE PROCEDURE `proc_get_eid_trends_year` (IN region_id INT(5),IN district_id 
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_outcomes_type_clinic` $$
-CREATE PROCEDURE `proc_get_eid_outcomes_type_clinic` (IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_outcomes_type_clinic` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5), IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
   SET @QUERY =  "SELECT
                 ed.entry_name clinic,
                 sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
@@ -156,6 +159,18 @@ CREATE PROCEDURE `proc_get_eid_outcomes_type_clinic` (IN which_pcr INT(1), IN `f
 				infant_age_month as age_month
 				FROM eid_test et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.type_of_clinic
 				WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
@@ -169,7 +184,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_type_clinic` (IN which_pcr INT(1), IN `f
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_outcomes_mother_regimen` $$
-CREATE PROCEDURE `proc_get_eid_outcomes_mother_regimen` (IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_outcomes_mother_regimen` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5), IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
   SET @QUERY =  "SELECT
                 ed.entry_name mother_regimen,
                 sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
@@ -178,6 +193,18 @@ CREATE PROCEDURE `proc_get_eid_outcomes_mother_regimen` (IN which_pcr INT(1), IN
 				infant_age_month as age_month
 				FROM eid_test et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.mother_regimen
 				WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
@@ -192,7 +219,7 @@ END$$
 
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_outcomes_infant_arv` $$
-CREATE PROCEDURE `proc_get_eid_outcomes_infant_arv` (IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_outcomes_infant_arv` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5), IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
   SET @QUERY =  "SELECT
                 ed.entry_name infant_arv,
                 sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
@@ -201,6 +228,18 @@ CREATE PROCEDURE `proc_get_eid_outcomes_infant_arv` (IN which_pcr INT(1), IN `fr
 				infant_age_month as age_month
 				FROM eid_test et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.infant_arv
 				WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
@@ -214,7 +253,7 @@ CREATE PROCEDURE `proc_get_eid_outcomes_infant_arv` (IN which_pcr INT(1), IN `fr
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_outcomes_hiv_status` $$
-CREATE PROCEDURE `proc_get_eid_outcomes_hiv_status` (IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_outcomes_hiv_status` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5), IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
   SET @QUERY =  "SELECT
                 ed.entry_name hiv_status,
                 sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
@@ -223,6 +262,18 @@ CREATE PROCEDURE `proc_get_eid_outcomes_hiv_status` (IN which_pcr INT(1), IN `fr
 				infant_age_month as age_month
 				FROM eid_test et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.mother_hiv_status
 				WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
@@ -385,11 +436,12 @@ CREATE PROCEDURE `proc_get_eid_outcomes_district` (IN `region` INT(5), IN `from_
 END$$
 
 DROP PROCEDURE IF EXISTS `proc_get_eid_outcomes_site` $$
-CREATE PROCEDURE `proc_get_eid_outcomes_site` (IN `district` INT(5),IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+CREATE PROCEDURE `proc_get_eid_outcomes_site` (IN `region_id` INT(5),IN `district_id` INT(5),IN `site_id` INT(5),IN `partner_id` INT(5),IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
   SET @QUERY =  "select
 				 s.name site,	
 				 d.name district,	
 				 r.name region,		
+				 p.name partner,		
 				count(*) total,
 				sum(pcr_result='Négatif') as negatif,
 				sum(pcr_result='Positif') as positif,
@@ -406,13 +458,22 @@ CREATE PROCEDURE `proc_get_eid_outcomes_site` (IN `district` INT(5),IN `from_p` 
 				sum(infant_age_month >=18 AND pcr_result='Positif') as plus_18_positif,
 				sum(infant_age_month <0 OR infant_age_month is null) as autre,
 				sum((infant_age_month <0 OR infant_age_month is null) AND pcr_result='Positif') as autre_positif
-				from eid_test et join site s on et.site_id = s.id join district d on et.district_id = d.id  join region r on et.region_id = r.id  
+				from eid_test et join site s on et.site_id = s.id join district d on et.district_id = d.id  join region r on et.region_id = r.id  left join partner p on et.partner_id = p.id  
                 where 1";
-	IF(district != 0) THEN 
-		SET @QUERY = CONCAT(@QUERY, " AND `et`.`district_id` = '",district,"' ");
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `et`.`partner_id` = '",partner_id,"' ");
 	END IF;
     SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
-    SET @QUERY = CONCAT(@QUERY, " group by site,district,region order by total desc");
+    SET @QUERY = CONCAT(@QUERY, " group by site,district,region,partner order by total desc");
      PREPARE stmt FROM @QUERY;
      EXECUTE stmt;
 END$$
@@ -475,9 +536,6 @@ CREATE PROCEDURE `proc_get_outcomes` (IN region_id INT(5),IN district_id INT(5),
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
-	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
-		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
-	END IF;
 	IF(which_pcr = -1) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
@@ -510,9 +568,6 @@ CREATE PROCEDURE `proc_get_eid_org_outcomes_age` (IN region_id INT(5),IN distric
 	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
 	END IF;
-	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
-		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
-	END IF;
 	IF(which_pcr = -1) THEN 
 		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
 	END IF;
@@ -522,4 +577,200 @@ CREATE PROCEDURE `proc_get_eid_org_outcomes_age` (IN region_id INT(5),IN distric
      EXECUTE stmt;
 END$$
 
+DROP PROCEDURE IF EXISTS `proc_get_outcomes_which_pcr` $$
+CREATE PROCEDURE `proc_get_outcomes_which_pcr` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+  SET @QUERY =  " SELECT
+	count(*) as total,
+    sum(which_pcr=1) as pcr1,
+	 sum(which_pcr=2) as pcr2,
+	 sum((which_pcr!=1 AND which_pcr!=2) OR which_pcr is null) as pcr_undefined
+     FROM `eid_test`
+     WHERE 1 ";
+     
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
+    SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
+     PREPARE stmt FROM @QUERY;
+     EXECUTE stmt;
+END$$
+
+DROP PROCEDURE IF EXISTS `proc_get_outcomes_pcr2_reason` $$
+CREATE PROCEDURE `proc_get_outcomes_pcr2_reason` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+  SET @QUERY =  " SELECT
+	ed.entry_name pcr2_reason,
+	count(*) as total,
+        sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
+	 sum(pcr_result='Positif') as positif,
+	 sum(pcr_result='Négatif') as negatif
+     FROM `eid_test` et left join `eid_dictionary` ed on ed.id = et.second_pcr_test_reason
+     WHERE which_pcr=2 ";
+     
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
+    SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
+        SET @QUERY = CONCAT(@QUERY, " group by pcr2_reason order by total desc");
+     PREPARE stmt FROM @QUERY;
+     EXECUTE stmt;
+END$$
+
+
+DROP PROCEDURE IF EXISTS `proc_get_eid_org_outcomes_age_clinic_type` $$
+CREATE PROCEDURE `proc_get_eid_org_outcomes_age_clinic_type` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5),IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+  SET @QUERY =  " SELECT
+	infant_age_month as age_month,
+    ed.entry_name clinic,
+    count(*) total,
+    sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
+	 sum(pcr_result='Positif') as positif,
+	 sum(pcr_result='Négatif') as negatif
+     FROM `eid_test` et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.type_of_clinic
+     WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
+	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
+	END IF;
+	IF(which_pcr = -1) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
+	END IF;
+    SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
+    SET @QUERY = CONCAT(@QUERY, " group by clinic,infant_age_month");
+     PREPARE stmt FROM @QUERY;
+     EXECUTE stmt;
+END$$
+
+DROP PROCEDURE IF EXISTS `proc_get_eid_org_outcomes_age_mother_regimen` $$
+CREATE PROCEDURE `proc_get_eid_org_outcomes_age_mother_regimen` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5),IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+  SET @QUERY =  " SELECT
+	infant_age_month as age_month,
+    ed.entry_name mother_regimen,
+    count(*) total,
+    sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
+	 sum(pcr_result='Positif') as positif,
+	 sum(pcr_result='Négatif') as negatif
+     FROM `eid_test` et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.mother_regimen
+     WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
+	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
+	END IF;
+	IF(which_pcr = -1) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
+	END IF;
+    SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
+    SET @QUERY = CONCAT(@QUERY, " group by mother_regimen,age_month");
+     PREPARE stmt FROM @QUERY;
+     EXECUTE stmt;
+END$$
+
+DROP PROCEDURE IF EXISTS `proc_get_eid_org_outcomes_age_infant_arv` $$
+CREATE PROCEDURE `proc_get_eid_org_outcomes_age_infant_arv` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5),IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+  SET @QUERY =  " SELECT
+	infant_age_month as age_month,
+    ed.entry_name infant_arv,
+    count(*) total,
+    sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
+	 sum(pcr_result='Positif') as positif,
+	 sum(pcr_result='Négatif') as negatif
+     FROM `eid_test` et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.infant_arv
+     WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
+	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
+	END IF;
+	IF(which_pcr = -1) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
+	END IF;
+    SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
+    SET @QUERY = CONCAT(@QUERY, " group by infant_arv,age_month");
+     PREPARE stmt FROM @QUERY;
+     EXECUTE stmt;
+END$$
+
+DROP PROCEDURE IF EXISTS `proc_get_eid_org_outcomes_age_mother_hiv_status` $$
+CREATE PROCEDURE `proc_get_eid_org_outcomes_age_mother_hiv_status` (IN region_id INT(5),IN district_id INT(5),IN site_id INT(5),IN partner_id INT(5),IN which_pcr INT(1), IN `from_p` INT(8), IN `to_p` INT(8))  BEGIN
+  SET @QUERY =  " SELECT
+	infant_age_month as age_month,
+    ed.entry_name mother_hiv_status,
+    count(*) total,
+    sum((pcr_result!='Négatif' AND pcr_result!='Positif') OR pcr_result is null) as invalide,
+	 sum(pcr_result='Positif') as positif,
+	 sum(pcr_result='Négatif') as negatif
+     FROM `eid_test` et join eid_patient ep on ep.id= et.patient_id left join eid_dictionary ed on ed.id = ep.mother_hiv_status
+     WHERE 1 ";
+	IF(region_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `region_id` = '",region_id,"' ");
+	END IF;
+	IF(district_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `district_id` = '",district_id,"' ");
+	END IF;
+	IF(site_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `site_id` = '",site_id,"' ");
+	END IF;
+	IF(partner_id != 0 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `partner_id` = '",partner_id,"' ");
+	END IF;
+	IF(which_pcr != 0 && which_pcr != -1 ) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` = '",which_pcr,"' ");
+	END IF;
+	IF(which_pcr = -1) THEN 
+		SET @QUERY = CONCAT(@QUERY, " AND `which_pcr` is null");
+	END IF;
+    SET @QUERY = CONCAT(@QUERY, " AND `yearmonth` between '",from_p ,"' and '",to_p ,"' ");
+    SET @QUERY = CONCAT(@QUERY, " group by mother_hiv_status,age_month");
+     PREPARE stmt FROM @QUERY;
+     EXECUTE stmt;
+END$$
 DELIMITER ;
