@@ -95,7 +95,7 @@ global.$.datepicker = $.datepicker;
 
 function getVisitInfos(locale) {
     var this_page = location.pathname + location.search;
-    $.get("/"+locale+"/visit/infos", {page: this_page}).done(function (data) {
+    $.get("visit/infos", {page: this_page}).done(function (data) {
         $('#total_visit').text(data['total_visit']);
         $('#page_views').text(data['page_views']);
         $('#online').text(data['online']);
