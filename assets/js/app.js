@@ -93,14 +93,14 @@ global.$.datepicker = $.datepicker;
 
 })(jQuery); // End of use strict
 
-function getVisitInfos(locale) {
+function getVisitInfos(home) {
     var this_page = location.pathname + location.search;
-    $.get("visit/infos", {page: this_page}).done(function (data) {
+    $.get(home+"visit/infos", {page: this_page}).done(function (data) {
         $('#total_visit').text(data['total_visit']);
         $('#page_views').text(data['page_views']);
         $('#online').text(data['online']);
     }).always(function (data) {
-        setTimeout(function(){getVisitInfos(locale);}, 10000);
+        setTimeout(function(){getVisitInfos(home);}, 10000);
     });
 }
 
