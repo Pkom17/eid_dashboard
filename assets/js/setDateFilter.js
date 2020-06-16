@@ -1,4 +1,5 @@
-module.exports = function (path,locale) {
+module.exports = function (path, locale) {
+    $('.loader').removeClass('hidden');
     var startDate = $('#startDate_' + locale).val();
     var endDate = $('#endDate_' + locale).val();
     $.ajax({

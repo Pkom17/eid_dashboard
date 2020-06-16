@@ -11,15 +11,18 @@
                 placeholder: '{{'Choisir un district'|trans}}'
             });
             $('#org_district').on("change", function () {
+                $('.loader').removeClass('hidden');
                 var district_id = $(this).val();
                 if (district_id == 0) {
                     $.post('{{url('app_org_district')}}' + '/overview', null, function (data) {
                         $('.pane-default').html(data);
+                        $('.loader').addClass('hidden');
                     });
                 } else {
                     $.post('{{url('app_org_district')}}' + '/district_details/' + district_id, null, function (data) {
                         $('.pane-default').html(data);
                         refreshDataTable();
+                        $('.loader').addClass('hidden');
                     });
                 }
             });

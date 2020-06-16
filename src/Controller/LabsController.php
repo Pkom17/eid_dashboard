@@ -34,6 +34,151 @@ class LabsController extends AbstractController {
     }
 
     /**
+     * @Route("/labs/labs_outcomes", name="app_labs_outcomes")
+     */
+    public function eidOutcomesByLabs(TranslatorInterface $translator) {
+        $labs = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->findEIDPlateformes();
+        $types = [];
+        $categories = [];
+        $k = 0;
+        foreach ($labs as $value) {
+            $types[$k] = $value['name'];
+            $k++;
+        }
+
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
+        $outcomes = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->getEidOutcomesLabsStats($start, $end);
+
+        $d = [];
+
+//prepare series data
+        $d[0]['name'] = $translator->trans('Positive');
+        $d[0]['type'] = 'column';
+        $d[0]['color'] = $this->getParameter('pos_color');
+        $d[0]['yAxis'] = 1;
+        $d[1]['name'] = $translator->trans('Negative');
+        $d[1]['type'] = 'column';
+        $d[1]['color'] = $this->getParameter('neg_color');
+        $d[1]['yAxis'] = 1;
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
+        $u = 0;
+        $d[0]['data'][$u] = 0;
+        $d[1]['data'][$u] = 0;
+        $d[2]['data'][$u] = 0;
+        $d[3]['data'][$u] = 0;
+        $col_limit = $this->getParameter('graph_column_limit');
+        foreach ($outcomes as $entry) {
+            if (is_null($entry['plateforme']) || $entry['plateforme'] == 'null' || $entry['plateforme'] == '') {
+                $categories[$u] = $translator->trans('Aucune donnée');
+            } else {
+                $categories[$u] = $entry['plateforme'];
+            }
+            $d[0]['data'][$u] = intval($entry['positif']);
+            $d[1]['data'][$u] = intval($entry['negatif']);
+            $d[2]['data'][$u] = intval($entry['invalide']);
+            if (intval($entry['total']) == 0) {
+                $d[3]['data'][$u] = 0;
+            } else {
+                $d[3]['data'][$u] = floatval(number_format(($d[0]['data'][$u] / (intval($entry['total']))) * 100, 2));
+            }
+            if ($u == $col_limit) {
+                break;
+            }
+            $u++;
+        }
+        return $this->render('labs/labs_outcomes.html.twig', [
+                    'series' => json_encode($d),
+                    'categories' => json_encode($categories),
+        ]);
+    }
+
+    /**
+     * @Route("/labs/trends/{lab_id?0}", name="app_lab_trends",requirements={"lab_id"="\d+"})
+     */
+    public function testsTrendsLabs(TranslatorInterface $translator, int $lab_id = 0) {
+        $start = $this->getStartDateForFilter();
+        $end = $this->getEndDateForFilter();
+        $d = [];
+        $periodes = [];
+        $i = 0;
+        $start_year = intval(substr($start, 0, 4));
+        $end_year = intval(substr($end, 0, 4));
+        if ($end_year > intval(date("Y"))) {
+            $end_year = intval(date("Y"));
+        }
+        $end_month = intval(substr($end, 4, 2));
+        $start2 = intval(substr($start, 0, 4) . '01');
+        $outcomes = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->getTestsTrendsPlateforme($lab_id, $start2, $end);
+        for ($j = $start_year; $j <= $end_year; $j++) {
+            for ($k = 1; $k <= 12; $k++) {
+                $periodes[$i]['year'] = $j;
+                $periodes[$i]['month'] = $k;
+                if ($j == $end_year && $k == $end_month) {
+                    break;
+                }
+                $i++;
+            }
+        }
+//prepare categories
+        $categories = [];
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        foreach ($periodes as $v) {
+            $categories[] = $translator->trans($months[$v['month'] - 1]) . '-' . $v['year'];
+        }
+//prepare series data
+        $d[0]['name'] = $translator->trans('Positive');
+        $d[0]['type'] = 'column';
+        $d[0]['color'] = $this->getParameter('pos_color');
+        $d[0]['yAxis'] = 1;
+        $d[1]['name'] = $translator->trans('Negative');
+        $d[1]['type'] = 'column';
+        $d[1]['color'] = $this->getParameter('neg_color');
+        $d[1]['yAxis'] = 1;
+        $d[2]['name'] = $translator->trans('Invalide');
+        $d[2]['type'] = 'column';
+        $d[2]['color'] = $this->getParameter('inv_color');
+        $d[2]['yAxis'] = 1;
+        $d[3]['name'] = $translator->trans('Positivité');
+        $d[3]['type'] = 'spline';
+        $d[3]['color'] = $this->getParameter('pos_color2');
+        $d[3]['tooltip']['valueSuffix'] = " %";
+        foreach ($periodes as $p) {
+            foreach ($outcomes as $entry) {
+                if ($entry['year'] == $p['year'] && $entry['month'] == $p['month']) {
+                    $d[0]['data'][] = intval($entry['positif']);
+                    $d[1]['data'][] = intval($entry['negatif']);
+                    $d[2]['data'][] = intval($entry['invalide']);
+                    if (intval($entry['negatif'] + intval($entry['positif']) + intval($entry['invalide'])) == 0) {
+                        $d[3]['data'][] = 0;
+                    } else {
+                        $d[3]['data'][] = floatval(number_format((intval($entry['positif']) / (intval($entry['negatif'] + intval($entry['positif']) + intval($entry['invalide'])))) * 100, 2));
+                    }
+                    continue(2);
+                }
+            }
+            $d[0]['data'][] = 0;
+            $d[1]['data'][] = 0;
+            $d[2]['data'][] = 0;
+            $d[3]['data'][] = 0;
+        }
+
+        return $this->render('labs/test_trends.html.twig', [
+                    'series' => json_encode($d),
+                    'categories' => json_encode($categories),
+                    'start' => $translator->trans(Util::MONTHS[substr($start, 4, 2)]) . ' ' . substr($start, 0, 4),
+                    'end' => $translator->trans(Util::MONTHS[substr($end, 4, 2)]) . ' ' . substr($end, 0, 4),
+        ]);
+    }
+
+    /**
      * @Route("/labs/labs_stat", name="app_labs_stats")
      */
     public function labsStat(Request $request, TranslatorInterface $translator) {
@@ -276,22 +421,18 @@ class LabsController extends AbstractController {
     /**
      * @Route("/labs/labs_tat/{plateforme}", name="app_labs_tat",requirements={"plateforme"="-?\d+"})
      */
-    public function labsTAT(Request $request, TranslatorInterface $translator,$plateforme=0) {
+    public function labsTAT(Request $request, TranslatorInterface $translator, $plateforme = 0) {
         $start = $this->getStartDateForFilter();
         $end = $this->getEndDateForFilter();
 
-        if($plateforme == 0){
+        if ($plateforme == 0) {
             return $this->allLabsTAT($request, $translator, $start, $end);
+        } else {
+            return $this->oneLabTAT($request, $translator, $plateforme, $start, $end);
         }
-        else
-        {
-            return $this->oneLabTAT($request, $translator,$plateforme, $start, $end);
-        }
-        
     }
 
-    
-    private function allLabsTAT(Request $request, TranslatorInterface $translator, int $start,int $end) {
+    private function allLabsTAT(Request $request, TranslatorInterface $translator, int $start, int $end) {
         $tats_ = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->getAllPlateformesTATs($start, $end);
         $plateformes = $this->getDoctrine()->getRepository(\App\Entity\Plateforme::class)->findEIDPlateformes();
         $labs = [];
@@ -383,8 +524,7 @@ class LabsController extends AbstractController {
         ]);
     }
 
-
-    private  function oneLabTAT(Request $request, TranslatorInterface $translator, int $plateforme, int $start,int $end) {
+    private function oneLabTAT(Request $request, TranslatorInterface $translator, int $plateforme, int $start, int $end) {
 
         $start_year = intval(substr($start, 0, 4));
         $start_month = intval(substr($start, 4, 2));

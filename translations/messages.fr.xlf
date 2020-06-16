@@ -9,6 +9,14 @@
                 <source>Tableau de bord EID</source>
                 <target>Tableau de bord EID</target>
             </trans-unit>
+            <trans-unit id="app_version" resname="app_version">
+                <source>Version 1.0</source>
+                <target>Version 1.0</target>
+            </trans-unit>
+            <trans-unit id="app_loader" resname="loader_wait">
+                <source>Patientez SVP...</source>
+                <target>Patientez SVP...</target>
+            </trans-unit>
             <trans-unit id="import_file_title" resname="Importer un nouveau fichier">
                 <source>Importer un nouveau fichier</source>
                 <target>Importer un nouveau fichier</target>
@@ -217,7 +225,7 @@
                 <source>A:</source>
                 <target>A:</target>
             </trans-unit> 
-           <trans-unit id="lab_rang_pcr" resname="Rang PCR">
+            <trans-unit id="lab_rang_pcr" resname="Rang PCR">
                 <source>Rang PCR</source>
                 <target>Rang PCR</target>
             </trans-unit>
@@ -281,6 +289,127 @@
                 <source>Tableau de bord CV</source>
                 <target>Tableau de bord CV</target>
             </trans-unit>
+            <trans-unit id="regions" resname="Regions">
+                <source>Regions</source>
+                <target>Régions</target>
+            </trans-unit>
+            <trans-unit id="districts" resname="Districts">
+                <source>Districts</source>
+                <target>Districts</target>
+            </trans-unit>
+            <trans-unit id="etablissements" resname="Etablissements">
+                <source>Etablissements</source>
+                <target>Etablissements</target>
+            </trans-unit>
+            <trans-unit id="visites" resname="Visites">
+                <source>Visites</source>
+                <target>Visites</target>
+            </trans-unit>
+            <trans-unit id="total" resname="Total">
+                <source>Total</source>
+                <target>Total</target>
+            </trans-unit>
+            <trans-unit id="cette_page" resname="Cette page">
+                <source>Cette page</source>
+                <target>Cette page</target>
+            </trans-unit>
+            <trans-unit id="en_ligne" resname="En ligne">
+                <source>En ligne</source>
+                <target>En ligne</target>
+            </trans-unit>
+            <trans-unit id="prelevement_reception" resname="Du prélèvement à la reception">
+                <source>Du prélèvement à la reception</source>
+                <target>Du prélèvement à la reception</target>
+            </trans-unit>
+            <trans-unit id="reception_traitement" resname="De la reception au traitement">
+                <source>De la reception au traitement</source>
+                <target>De la reception au traitement</target>
+            </trans-unit>
+            <trans-unit id="traitement_validation" resname="Du traitement à la validation">
+                <source>Du traitement à la validation</source>
+                <target>Du traitement à la validation</target>
+            </trans-unit>
+            <trans-unit id="jours" resname="Jours">
+                <source>Jours</source>
+                <target>Jours</target>
+            </trans-unit>
+            <trans-unit id="invalide" resname="Invalide">
+                <source>Invalide</source>
+                <target>Invalide</target>
+            </trans-unit>
+            <trans-unit id="tests" resname="Tests">
+                <source>Tests</source>
+                <target>Tests</target>
+            </trans-unit>
+            <trans-unit id="vih_1" resname="VIH-1">
+                <source>VIH-1</source>
+                <target>VIH-1</target>
+            </trans-unit>
+            <trans-unit id="vih_2" resname="VIH-2">
+                <source>VIH-2</source>
+                <target>VIH-2</target>
+            </trans-unit>
+            <trans-unit id="vih_1_2" resname="VIH 1+2">
+                <source>VIH-1+2</source>
+                <target>VIH-1+2</target>
+            </trans-unit>
+            <trans-unit id="vih_pos" resname="VIH-POS">
+                <source>VIH-POS</source>
+                <target>VIH-POS</target>
+            </trans-unit>
+            <trans-unit id="moins_2_mois" resname="Moins de 2 mois">
+                <source>Moins de 2 mois</source>
+                <target>Moins de 2 mois</target>
+            </trans-unit>
+            <trans-unit id="2_6_mois" resname="2 - 6 mois">
+                <source>2 - 6 mois</source>
+                <target>2 - 6 mois</target>
+            </trans-unit>
+            <trans-unit id="6_12_mois" resname="6 -12 mois">
+                <source>6 -12 mois</source>
+                <target>6 -12 mois</target>
+            </trans-unit>
+            <trans-unit id="12_18_mois" resname="12 - 18 mois">
+                <source>12 - 18 mois</source>
+                <target>12 - 18 mois</target>
+            </trans-unit>
+            <trans-unit id="plus_18_mois" resname="Plus de 18 mois">
+                <source>Plus de 18 mois</source>
+                <target>Plus de 18 mois</target>
+            </trans-unit>
+            <trans-unit id="vaccination" resname="Vaccination">
+                <source>Vaccination</source>
+                <target>Vaccination</target>
+            </trans-unit>
+            <trans-unit id="pediatrie" resname="Pédiatrie">
+                <source>Pédiatrie</source>
+                <target>Pédiatrie</target>
+            </trans-unit>
+            <trans-unit id="dietetique" resname="Diététique">
+                <source>Diététique</source>
+                <target>Diététique</target>
+            </trans-unit>
+            <trans-unit id="nvp" resname="NVP">
+                <source>NVP</source>
+                <target>NVP</target>
+            </trans-unit>
+            <trans-unit id="AZT_NVP_3TC" resname="AZT+NVP+3TC">
+                <source>AZT+NVP+3TC</source>
+                <target>AZT+NVP+3TC</target>
+            </trans-unit>
+            <trans-unit id="HAART" resname="HAART">
+                <source>HAART</source>
+                <target>HAART</target>
+            </trans-unit>
+            <trans-unit id="AZT_NVP" resname="AZT+NVP">
+                <source>AZT+NVP</source>
+                <target>AZT+NVP</target>
+            </trans-unit>
+            <trans-unit id="nvp_dose_unique" resname="NVP dose unique">
+                <source>NVP dose unique</source>
+                <target>NVP dose unique</target>
+            </trans-unit>
+            
         </body>
     </file>
 </xliff>

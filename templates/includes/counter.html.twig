@@ -1,0 +1,14 @@
+{# templates/includes/counter.html.twig #}
+<div class="counter row">
+    <div class="visite_box" style="">
+        <h6>{{'Visites'|trans}}</h6>
+        <p class='c_views'>
+            {{'Total'|trans}}: <span id="total_visit"></span> <b>|</b> &nbsp;
+            {{'Cette page'|trans}}: <span id="page_views"></span> <b>|</b> &nbsp;
+            {{'En ligne'|trans}}: <span id="online"></span>
+        </p>
+    </div>
+    <script type="text/javascript">
+        getVisitInfos("{{app.request.locale}}");
+    </script>       
+</div>

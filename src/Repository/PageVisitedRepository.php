@@ -12,10 +12,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method PageVisited[]    findAll()
  * @method PageVisited[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PageVisitedRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
+class PageVisitedRepository extends ServiceEntityRepository {
+
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, PageVisited::class);
     }
 
@@ -23,28 +22,39 @@ class PageVisitedRepository extends ServiceEntityRepository
     //  * @return PageVisited[] Returns an array of PageVisited objects
     //  */
     /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+      public function findByExampleField($value)
+      {
+      return $this->createQueryBuilder('p')
+      ->andWhere('p.exampleField = :val')
+      ->setParameter('val', $value)
+      ->orderBy('p.id', 'ASC')
+      ->setMaxResults(10)
+      ->getQuery()
+      ->getResult()
+      ;
+      }
+     */
 
     /*
-    public function findOneBySomeField($value): ?PageVisited
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+      public function findOneBySomeField($value): ?PageVisited
+      {
+      return $this->createQueryBuilder('p')
+      ->andWhere('p.exampleField = :val')
+      ->setParameter('val', $value)
+      ->getQuery()
+      ->getOneOrNullResult()
+      ;
+      }
+     */
+    public function getPageVisits($page) {
+        $sql = 'select sum(visited_count) page_views from page_visited where page = :page';
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['page'=>$page]);
+        $data = $stmt->fetchAll();
+        $stmt->closeCursor();
+        $conn->close();
+        return $data;
     }
-    */
+
 }

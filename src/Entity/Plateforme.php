@@ -49,59 +49,64 @@ class Plateforme {
      */
     private $labPrefixes;
 
-    public function __construct()
-    {
+    /**
+     * @ORM\column(name="eid_active", type="boolean", options={"default":1})
+     */
+    protected $eidActive = true;
+
+    public function __construct() {
         $this->labPrefixes = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getName(): ?string
-    {
+    public function getName(): ?string {
         return $this->name;
     }
 
-    public function setName(string $name): self
-    {
+    public function setName(string $name): self {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getLabDesc(): ?string
-    {
+    public function isEidActive(): ?bool {
+        return $this->eidActive;
+    }
+
+    public function setEidActive(bool $eidActive): self {
+        $this->eidActive = $eidActive;
+
+        return $this;
+    }
+
+    public function getLabDesc(): ?string {
         return $this->labDesc;
     }
 
-    public function setLabDesc(?string $labDesc): self
-    {
+    public function setLabDesc(?string $labDesc): self {
         $this->labDesc = $labDesc;
 
         return $this;
     }
 
-    public function getLabLocation(): ?string
-    {
+    public function getLabLocation(): ?string {
         return $this->labLocation;
     }
 
-    public function setLabLocation(?string $labLocation): self
-    {
+    public function setLabLocation(?string $labLocation): self {
         $this->labLocation = $labLocation;
 
         return $this;
     }
 
-    public function getSite(): ?Site
-    {
+    public function getSite(): ?Site {
         return $this->site;
     }
 
-    public function setSite(?Site $site): self
-    {
+    public function setSite(?Site $site): self {
         $this->site = $site;
 
         return $this;
@@ -110,13 +115,11 @@ class Plateforme {
     /**
      * @return Collection|LabPrefix[]
      */
-    public function getLabPrefixes(): Collection
-    {
+    public function getLabPrefixes(): Collection {
         return $this->labPrefixes;
     }
 
-    public function addLabPrefix(LabPrefix $labPrefix): self
-    {
+    public function addLabPrefix(LabPrefix $labPrefix): self {
         if (!$this->labPrefixes->contains($labPrefix)) {
             $this->labPrefixes[] = $labPrefix;
             $labPrefix->setPlateforme($this);
@@ -125,8 +128,7 @@ class Plateforme {
         return $this;
     }
 
-    public function removeLabPrefix(LabPrefix $labPrefix): self
-    {
+    public function removeLabPrefix(LabPrefix $labPrefix): self {
         if ($this->labPrefixes->contains($labPrefix)) {
             $this->labPrefixes->removeElement($labPrefix);
             // set the owning side to null (unless already changed)
@@ -138,5 +140,4 @@ class Plateforme {
         return $this;
     }
 
-   
 }

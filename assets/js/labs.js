@@ -117,6 +117,7 @@ $('#select_plateforme').val(0);
 $('#select_plateforme_tat').val(0);
 
 $("#select_age").on("change", function () {
+    $('.loader').removeClass('hidden');
     var pcr = 0;
     var age = $('#select_age').val();
     var plateforme_id = $('#select_plateforme').val();
@@ -129,6 +130,7 @@ $("#select_age").on("change", function () {
             height: height
         });
         $('#card_labs_stat_ages').html(data);
+        $('.loader').addClass('hidden');
     });
 });
 
@@ -137,6 +139,7 @@ $('#select_plateforme').on("change", function () {
 });
 
 $("#select_plateforme_tat").on("change", function () {
+    $('.loader').removeClass('hidden');
     var plateforme_id = $('#select_plateforme_tat').val();
     if (!plateforme_id) {
         plateforme_id = 0;
@@ -147,5 +150,6 @@ $("#select_plateforme_tat").on("change", function () {
             height: height
         });
         $('#card_labs_tat').html(data);
+        $('.loader').addClass('hidden');
     });
 });

@@ -12,16 +12,19 @@
             });
 
             $('#org_site').on("change", function () {
+                $('.loader').removeClass('hidden');
                 var site_id = $(this).val();
                 if (site_id == 0) {
                     $.post('{{url('app_org_site')}}' + '/overview', null, function (data) {
                         $('.pane-default').html(data);
+                        $('.loader').addClass('hidden');
                     });
                 } else {
                     $.post('{{url('app_org_site')}}' + '/site_details/' + site_id, null, function (data) {
                         $('.pane-default').html(data);
                         refreshDataTable();
                         $('#age_details').tabs();
+                        $('.loader').addClass('hidden');
                     });
                 }
             });

@@ -3,6 +3,49 @@
 @import '~datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css';
 html {
     body{
+        .app_version{
+            position: absolute;
+            left: 6rem;
+            top: 2.7rem;
+            font-style: italic;
+            font-size: 0.8em;
+            color: #9090aa;
+        }
+        .loader{
+            position: fixed;
+            right: 1rem;
+            top:5rem;
+            z-index: 9999;
+            font-style: italic;
+            color:#888;
+            font-size:0.8em;
+        }
+        .hidden{
+            display:none;
+        }
+        .visite_box{
+            font-size: 0.9em;
+            display: inline;
+            border: 1px solid #aaa;
+            border-radius:0.25rem;
+            border-bottom: .15rem solid #4e73df;
+            background: #eeeeee;
+            margin: 10px 0 10px 0;
+            h6{
+                margin:0px;
+                font-weight: bolder;
+                text-align: center;
+            }
+            p{
+                margin: 2px;
+                span{
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    color:#e33a24;
+                    font-family: consolas;
+                }
+            }
+        }
         .date_filtered_filter{
             float: right;
             font-style: italic;
@@ -72,7 +115,7 @@ html {
 
             }
             .pane_filter{
-                margin-top: 80px;
+                margin-top: 0px;
             }
         }
         .footer {

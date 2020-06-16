@@ -12,15 +12,18 @@
             });
 
             $('#org_region').on("change", function () {
+                $('.loader').removeClass('hidden');
                 var region_id = $(this).val();
                 if (region_id == 0) {
                     $.post('{{url('app_org_region')}}' + '/overview', null, function (data) {
                         $('.pane-default').html(data);
+                        $('.loader').addClass('hidden');
                     });
                 } else {
                     $.post('{{url('app_org_region')}}' + '/region_details/' + region_id, null, function (data) {
                         $('.pane-default').html(data);
                         refreshDataTable();
+                        $('.loader').addClass('hidden');
                     });
                 }
             });

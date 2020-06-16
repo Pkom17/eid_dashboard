@@ -61,9 +61,15 @@
                             {% include 'includes/locale.html.twig' %}                            
                         </div>
                     </div>
+                    <p class="app_version">{{'app_version'|trans}}</p>
                 </nav>
             {% endblock %}
-            <div id="content-wrapper" class="">
+            <div id="content-wrapper" class="">  
+                <p class="loader hidden">
+                    <img src="{{ url('homepage')~'build/images/loader.gif' }}" />
+                    <span>{{ 'loader_wait'|trans }}</span>
+                </p>
+                {% include 'includes/counter.html.twig' %} 
                 {% block body %}
                     {{ render(controller('App\\Controller\\IndexController::filter')) }}
 

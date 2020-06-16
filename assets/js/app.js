@@ -38,6 +38,7 @@ const setDateFilter = require('./setDateFilter');
 const resetDateFilter = require('./resetDateFilter');
 global.setDateFilter = setDateFilter;
 global.resetDateFilter = resetDateFilter;
+global.getVisitInfos = getVisitInfos;
 global.$.datepicker = $.datepicker;
 
 
@@ -92,6 +93,16 @@ global.$.datepicker = $.datepicker;
 
 })(jQuery); // End of use strict
 
+function getVisitInfos(locale) {
+    var this_page = location.pathname + location.search;
+    $.get("/"+locale+"/visit/infos", {page: this_page}).done(function (data) {
+        $('#total_visit').text(data['total_visit']);
+        $('#page_views').text(data['page_views']);
+        $('#online').text(data['online']);
+    }).always(function (data) {
+        setTimeout(function(){getVisitInfos(locale);}, 10000);
+    });
+}
 
 $(document).ready(function () {
     $.datepicker.regional['en'] = {

@@ -64,6 +64,27 @@ class PlateformeRepository extends ServiceEntityRepository {
         return $results;
     }
 
+    public function getTestsTrendsPlateforme($lab_id, $from, $to) {
+        $results = [];
+        $conn = $this->getEntityManager()->getConnection();
+        $query = "CALL proc_get_eid_lab_trends_month (:lab_id,:age_month_min,:age_month_max,:which_pcr,:from,:to) ";
+        $prep = $conn->prepare($query);
+        $exec = $prep->execute(
+                [
+                    'lab_id' => $lab_id,
+                    'age_month_min' => -1,
+                    'age_month_max' => -1,
+                    'which_pcr' => 0,
+                    'from' => $from,
+                    'to' => $to
+        ]);
+        if ($exec) {
+            $results = $prep->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        $conn->close();
+        return $results;
+    }
+
     public function getEidOutcomesLabsAge($which_pcr, $lab, $age_month_min, $age_month_max, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -107,7 +128,7 @@ class PlateformeRepository extends ServiceEntityRepository {
         return $data;
     }
 
-    public function getPlateformeTATs($plateforme,$from, $to) {
+    public function getPlateformeTATs($plateforme, $from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
         $query = "select  YEAR(released_date) as year,MONTH(released_date) as month,datediff(received_date,collected_date) as tat1, datediff(completed_date,received_date) as tat2, datediff(released_date,completed_date) as tat3  from eid_test where yearmonth between :from and :to and plateforme_id = :plateforme order by year,month";
@@ -124,6 +145,7 @@ class PlateformeRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getAllPlateformesTATs($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -140,6 +162,7 @@ class PlateformeRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
+
     public function getPlateformeTAT1($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
@@ -156,8 +179,8 @@ class PlateformeRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
-    
-        public function getPlateformeTAT2($from, $to) {
+
+    public function getPlateformeTAT2($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
         $query = "select  YEAR(released_date) as year,MONTH(released_date) as month,p.name plateforme, datediff(completed_date,received_date) as tat2 from eid_test et join plateforme p on et.plateforme_id = p.id where yearmonth between :from and :to order by tat2";
@@ -173,8 +196,8 @@ class PlateformeRepository extends ServiceEntityRepository {
         $conn->close();
         return $results;
     }
-    
-        public function getPlateformeTAT3($from, $to) {
+
+    public function getPlateformeTAT3($from, $to) {
         $results = [];
         $conn = $this->getEntityManager()->getConnection();
         $query = "select  YEAR(released_date) as year,MONTH(released_date) as month,p.name plateforme, datediff(released_date,completed_date) as tat3 from eid_test et join plateforme p on et.plateforme_id = p.id where yearmonth between :from and :to order by tat3";

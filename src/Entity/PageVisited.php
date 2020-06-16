@@ -32,6 +32,11 @@ class PageVisited {
     protected $visitedCount;
 
     /**
+     * @ORM\column(type="integer",length=8,name="yearmonth")
+     */
+    protected $yearmonth;
+
+    /**
      * @ORM\Column(type="datetime", name="first_visited_date")
      * @Assert\NotNull
      */
@@ -48,6 +53,12 @@ class PageVisited {
      * @ORM\JoinColumn(name="visitor_id", referencedColumnName="id")
      */
     protected $visitor;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Assert\NotNull
+     */
+    protected $timestamp;
 
     public function getId(): ?int {
         return $this->id;
@@ -99,6 +110,26 @@ class PageVisited {
 
     public function setVisitor(?visitor $visitor): self {
         $this->visitor = $visitor;
+
+        return $this;
+    }
+
+    public function getYearmonth(): ?int {
+        return $this->yearmonth;
+    }
+
+    public function setYearmonth(int $yearmonth): self {
+        $this->yearmonth = $yearmonth;
+
+        return $this;
+    }
+
+    public function getTimestamp(): ?int {
+        return $this->timestamp;
+    }
+
+    public function setTimestamp(int $timestamp): self {
+        $this->timestamp = $timestamp;
 
         return $this;
     }

@@ -4,11 +4,63 @@
     {{ parent() }}
 {% endblock %}
 {% block javascripts_2 %}
+    <script>
+        $(document).ready(function () {
+            $('#select_plateforme_out').val(0);
+            $('#select_plateforme_out').on("change", function () {
+                $('.loader').removeClass('hidden');
+                var lab_id = $(this).val();
+                if (lab_id == 0) {
+                        $.post('{{url('app_labs')}}' + '/labs_outcomes', null, function (data) {
+                        $('.labs_pane_1').html(data);
+                        $('.loader').addClass('hidden');
+                    });
+                } else {
+                        $.post('{{url('app_labs')}}' + '/trends/' + lab_id, null, function (data) {
+                        $('.labs_pane_1').html(data);
+                        $('.loader').addClass('hidden');
+                    });
+                }
+            });
+        });
+    </script>
     {{ encore_entry_script_tags('labs') }}
 {% endblock %}
 {% block body %}
     {{ parent() }}
     <div class="row sum_lane_1">
+        <div class="col-xl-12 col-lg-12 col-md-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-1">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="m-0 font-weight-bold text-primary">{{ 'Resultat EID par plateforme'|trans|upper }}</h6>
+                            <span class="date_filtered">
+                                {{ start ~' - '~ end}}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-5 input-group input-group-sm float-right">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ 'Plateformes'|trans }} </span>
+                                </div>
+                                <select name="plateforme_out" id="select_plateforme_out" class="form-control form-control-sm">
+                                    <option value="0" selected="selected">{{'Tout'|trans  }}</option>
+                                    {% for plateforme in plateformes %}
+                                        <option value="{{ plateforme['id'] }}">{{ plateforme['name']|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body labs_pane_1" >
+                    {{ render(controller('App\\Controller\\LabsController::eidOutcomesByLabs')) }} 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row sum_lane_2">
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-1">

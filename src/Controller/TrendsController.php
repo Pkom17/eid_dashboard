@@ -50,7 +50,7 @@ class TrendsController extends AbstractController {
      */
     public function testTrendsByYear(Request $request, TranslatorInterface $translator, int $region_id = 0, int $district_id = 0, int $site_id = 0, int $age_cat = 0, int $which_pcr = 0) {
         $eidRepo = new \App\Repository\EIDTestRepository($this->getDoctrine());
-        $year_limit = 11; // limits year to 12
+        $year_limit = 5; // limits year to 5
         $end_year = intval(date("Y")); //get current year
         $end = intval($end_year . '01');
         $start2 = intval($end_year - $year_limit . '01');
