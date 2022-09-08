@@ -25,7 +25,7 @@
         "datatables.net-buttons-dt": "^1.6.1",
         "datatables.net-dt": "^1.10.20",
         "highcharts": "^8.0.0",
-        "jszip": "^3.2.2",
+        "jszip": "^3.7.0",
         "select2": "^4.0.13",
         "webpack-jquery-ui": "^2.0.1"
     }
